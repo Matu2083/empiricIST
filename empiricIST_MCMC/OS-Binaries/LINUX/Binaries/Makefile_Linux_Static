@@ -1,0 +1,17 @@
+CC=g++
+VERSION = $(shell cat ./version)
+CFLAGS=-c -O3 -static -DVERSION=\"${VERSION}\"
+LDFLAGS=-static -lgsl -lgslcblas
+SOURCES=empiricIST_MCMC.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
+EXECUTABLE=empiricIST_MCMC.out
+
+all: $(SOURCES) $(EXECUTABLE) 
+	
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+
+.cpp.o:
+	$(CC) $(CFLAGS) $< -o $@
+
+

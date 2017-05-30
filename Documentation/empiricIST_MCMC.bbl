@@ -1,0 +1,23 @@
+\begin{thebibliography}{3}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+
+\bibitem[{Bank et~al.(2014)Bank, Hietpas, Wong, Bolon, and Jensen}]{BanHW14}
+Bank, C., R.~T. Hietpas, A.~Wong, D.~N. Bolon, and J.~D. Jensen, 2014.
+\newblock A bayesian mcmc approach to assess the complete distribution of
+  fitness effects of new mutations: Uncovering the potential for adaptive walks
+  in challenging environments.
+\newblock Genetics 196:841--852.
+
+\bibitem[{Boone et~al.(2014)Boone, Merrick, and Krachey}]{BooMK14}
+Boone, E.~L., J.~R. Merrick, and M.~J. Krachey, 2014.
+\newblock A hellinger distance approach to mcmc diagnostics.
+\newblock Journal of Statistical Computation and Simulation 84:833--849.
+
+\bibitem[{Matuszewski et~al.(in prep)Matuszewski, Jensen, and Bank}]{MatJB15}
+Matuszewski, S., J.~D. Jensen, and C.~Bank, in prep.
+\newblock empiricist: An integrated software and analysis tool for analyzing
+  time-sampled sequence data such as empiric .
+
+\end{thebibliography}

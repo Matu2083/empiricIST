@@ -1,0 +1,11 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Input data}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{empiricIST`MCMC`Input.py}{section.2}% 3
+\BOOKMARK [1][-]{section.3}{Usage}{}% 4
+\BOOKMARK [2][-]{subsection.3.1}{Compilation}{section.3}% 5
+\BOOKMARK [2][-]{subsection.3.2}{Execution}{section.3}% 6
+\BOOKMARK [1][-]{section.4}{MCMC output}{}% 7
+\BOOKMARK [2][-]{subsection.4.1}{Combining Files}{section.4}% 8
+\BOOKMARK [2][-]{subsection.4.2}{Concatenating Files}{section.4}% 9
+\BOOKMARK [2][-]{subsection.4.3}{Visualization of trace data}{section.4}% 10
+\BOOKMARK [1][-]{section.5}{DFE tail shape estimation}{}% 11
