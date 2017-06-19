@@ -9,6 +9,7 @@ Options:
 	-f ..., --file=...                use specified raw input file
 	-m, --missing                     shifts distribution of measured fitnesses relative to the smallest observed selection coefficient to account for missing data (i.e., selection coefficients too small to have been observed, though this might not be a problem with EMPIRIC data).
 	-s ... , --samples=...            only considers samples with more than 'samples' beneficial mutations
+	-c ... , --cutoff=...             cutoff value above mutant growth rates are considered beneficial (default = 1)
 	-l, --lrt                         likelihood-ratio test with null hypotheses kappa=0 against median(kappaHat) is performed
 	-r ..., --random=...              creates 100 random data sets with 100 samples each from generalized pareto distribution with scale parameter psi=1 and kappa passed as command line argument
 	-d ..., --draws=...               number of draws from generalized Pareto distribution
@@ -43,6 +44,7 @@ warnings.simplefilter("ignore", RuntimeWarning)
 _missing = 0
 _inputFile = -1
 _minSamples = 10			# If one sample contains less than 10 beneficial mutations it is not used. This number can be changed by employing the -s option.
+_cutOff = 1
 _performLRT = 0
 _createRandomSample = 0
 _randomKappa = 0
@@ -72,6 +74,9 @@ def main(argv):
 		elif opt in ("-s", "--samples"):
 			global _minSamples
 			_minSamples = int(arg)
+		elif opt in ("-c", "--cutoff"):
+			global _cutOff
+			_cutOff = float(arg)
 		elif opt in ("-l", "--lrt"):
 			global _performLRT
 			_performLRT = 1
@@ -104,14 +109,14 @@ if __name__ == "__main__":
 				dataRaw.append(row)
 			csvfile.close()
 		# Transforms data into floats and keeps only those posterior samples where at least '_minSamples' beneficial mutations have been recorded
-		data = [[float(i) for i in j.values() if float(i) > 1.] for j in dataRaw]
+		data = [[float(i) for i in j.values() if float(i) > _cutOff] for j in dataRaw]
 		data = [i for i in data if len(i) > _minSamples]
 		noSamples = len(data)
 		# If option is passed this shifts all selection coefficients to the smallest observed selection coefficient as described in Beisel et al. 2007 (Genetics). Otherwise the 'normal'/unshifted selection coefficients are calculated.
 		if missing == 1:
 			data = [[i-min(j) for i in j if i != min(j)] for j in data]
 		else:
-			data = [[i-1. for i in j] for j in data]
+			data = [[i-_cutOff. for i in j] for j in data]
 		return (data, noSamples)
 
 	def findClosest(list, target):
