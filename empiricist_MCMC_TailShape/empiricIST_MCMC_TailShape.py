@@ -57,7 +57,7 @@ def usage():
 
 def main(argv):
 	try:
-		opts, args = getopt.getopt(argv, "hf:m:s:d:r:l", ["help", "file=", "missing", "samples=", "draws=", "random=", "lrt"])
+		opts, args = getopt.getopt(argv, "hf:m:s:c:d:r:l", ["help", "file=", "missing", "samples=", "cutoff=", "draws=", "random=", "lrt"])
 	except getopt.GetoptError:
 		usage()
 		sys.exit(2)
@@ -104,7 +104,7 @@ if __name__ == "__main__":
 			dialect = csv.Sniffer().sniff(csvfile.readline(), [',',';','\t'])
 			csvfile.seek(0)
 			reader = csv.DictReader(csvfile, fieldnames=None, dialect = dialect)
-			
+			next(reader)
 			for row in reader:
 				dataRaw.append(row)
 			csvfile.close()
@@ -116,7 +116,7 @@ if __name__ == "__main__":
 		if missing == 1:
 			data = [[i-min(j) for i in j if i != min(j)] for j in data]
 		else:
-			data = [[i-_cutOff. for i in j] for j in data]
+			data = [[i-_cutOff for i in j] for j in data]
 		return (data, noSamples)
 
 	def findClosest(list, target):
