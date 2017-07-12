@@ -142,7 +142,7 @@ if __name__ == "__main__":
 			timePoints = map(float,fieldnames[skipcol::])
 			timePointsString = fieldnames[skipcol::]
 			notimePoints = len(timePoints)
-			seqIdentifier = (filter(lambda x: 'seq' in x or 'Seq' in x or 'sequence' in x or 'Sequence' in x, fieldnames))[0]
+			seqIdentifier = (filter(lambda x: 'seq' in x or 'Seq' in x or 'SEQ' in x or 'mutID' in x or 'sequence' in x or 'Sequence' in x, fieldnames))[0]
 			csvfile.close()
 		return (data, noMutants, noColData, fieldnames, timePoints, timePointsString, notimePoints, seqIdentifier)
 			
@@ -692,13 +692,14 @@ if __name__ == "__main__":
 				_idVector = removeDuplicatesOrdered([item[poolIdentifier] for item in data])
 				writeInitialInput(_initialR, _initialC, _idVector, noMutants, timePoints, timePointsString, poolIdentifier, inputFile, "", _totalReadNumberInitial, _totalReadNumberDict, [], hours)
 		else:
+			# :: UPDATE HERE ::
 			_countIDRaw = getValues(poolIdentifier, data)
 			_tempDictID = {x:_countIDRaw.count(x) for x in _countIDRaw}
 			_countIDKey = _tempDictID.keys()
 			_countID = _tempDictID.values()
 			_noDiffID = _countIDKey[-1]
 			
-			#set wildtype reference  and calculate total number of reads
+			#set wildtype reference and calculate total number of reads
 			_wtRef = searchRef(1, data, poolIdentifier)
 			_countWORef = noMutants-_countID[0]
 			_totalReadNumber = [sum(map(int,getValues(item, data))) for item in timePointsString]
@@ -707,16 +708,16 @@ if __name__ == "__main__":
 			
 			#initialize summary line
 			
-			_summaryLine = [data[0].copy()]
-			_summaryLine[0][sequenceIdentifier] = "XXX"
-			_summaryLine[0][poolIdentifier] = -1
+			#_summaryLine = [data[0].copy()]
+			#_summaryLine[0][sequenceIdentifier] = "XXX"
+			#_summaryLine[0][poolIdentifier] = -1
 			
-			if outlier == 1:
-				for item in timePointsString:
-					_summaryLine[0][str("o[" + item + "]")] = 1
+			#if outlier == 1:
+			#	for item in timePointsString:
+			#		_summaryLine[0][str("o[" + item + "]")] = 1
 			
-			if _pool == 1:
-				_summaryLine[0]['aa'] = "X"
+			#if _pool == 1:
+			#	_summaryLine[0]['aa'] = "X"
 
 			_fileIdentifier = 0
 			
@@ -724,26 +725,29 @@ if __name__ == "__main__":
 				_fileIdentifier += 1
 				_tempOutput = []
 				
+				# :: UPDATE HERE ::
 				while (len(_tempOutput) < group and len(_tempDictID) != 0):
 					tempK = max(_tempDictID.iterkeys(), key=(lambda key: _tempDictID[key]))
 					_tempOutput += searchRef(tempK, data, poolIdentifier)
 					del	_tempDictID[tempK]
 				
-				if sum(_tempDictID.values()) < group:
-					while len(_tempDictID) != 0:
-						tempK = max(_tempDictID.iterkeys(), key=(lambda key: _tempDictID[key]))
-						_tempOutput += searchRef(tempK, data, poolIdentifier)
-						del	_tempDictID[tempK]
+				# If this is commented out group is the MAX number of mutants for each sub-data set (the last data set might be less thann group)
+				#if sum(_tempDictID.values()) < group:
+				#	while len(_tempDictID) != 0:
+				#		tempK = max(_tempDictID.iterkeys(), key=(lambda key: _tempDictID[key]))
+				#		_tempOutput += searchRef(tempK, data, poolIdentifier)
+				#		del	_tempDictID[tempK]
 			
-				_summaryReadNumber = [x1 - x2 for (x1,x2) in zip(_totalReadNumberWORef, [sum(map(int,getValues(item, _tempOutput))) for item in timePointsString])]
-				for i in range(noTimePoints):
-					_summaryLine[0][timePointsString[i]] = _summaryReadNumber[i]
+				# :: UPDATE HERE ::
+				#_summaryReadNumber = [x1 - x2 for (x1,x2) in zip(_totalReadNumberWORef, [sum(map(int,getValues(item, _tempOutput))) for item in timePointsString])]
+				#for i in range(noTimePoints):
+				#	_summaryLine[0][timePointsString[i]] = _summaryReadNumber[i]
 			
 				_idVector = [1]
 				_idVector.extend(removeDuplicatesOrdered([item[poolIdentifier] for item in _tempOutput]))
 				
 				if not (len(_tempDictID) == 0 and _fileIdentifier == 1):
-					_tempOutput += _summaryLine
+					#_tempOutput += _summaryLine
 					_idVector.extend([-1])
 					_lenCut=len((inputFile.split('/')[-1]))
 					_fileName = (inputFile[:-_lenCut])+"MCMCInput-"+str(_fileIdentifier)+"-"+(inputFile.split('/')[-1])

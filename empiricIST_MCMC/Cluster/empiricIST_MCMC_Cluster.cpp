@@ -6,7 +6,7 @@
 //	The aim is to infer the selection coefficients from time-sampled
 //  deep-sequencing data.
 //
-//  Copyright (C) 2015  Sebastian Matuszewski
+//  Copyright (C) 2017  Sebastian Matuszewski
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -40,6 +40,8 @@
 //******************************************************
 
 #include <stdio.h>
+#include <stdexcept>
+#include <iomanip>
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_blas.h>
@@ -57,6 +59,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <algorithm>
+#include <limits>
 #include <time.h>
 
 //******************************************************
@@ -78,6 +81,7 @@ double jumpRSD;				// standard deviation for Gaussian distribution (passed as ar
 std::string _initialRC;		// name of data file for initialising the growth rates 'r' and initial population sizes 'c'
 int noMutants = 0;			// number of mutants
 int noMutantGhosts;			// number of mutants + number of ghosts
+int noMutantsOut;
 int timePoints;				// number of time points
 double hastingsValue;		// random number (log(randuniform[0,1]))
 double logLikelihood;		// log Likelihood for last accepted values
@@ -97,10 +101,10 @@ std::vector<double> logLData;				// vector of time sampled log likelihoods
 std::vector<double> effectiveSampleSizeR;	// vector of ESS for growth rates r
 std::vector<double> effectiveSampleSizeC;	// vector of ESS for initial population sizes c
 double effectiveSampleSizelogL;				// ESS for logLikelihood
-double minESS = 1000000000;					// minimum ESS calculated from all samples and all parameters
-double minESS_C = 1000000000;				// minimum ESS calculated from all samples of C
-double minESS_R = 1000000000;				// minimum ESS calculated from all samples of R
-double minESS_logL = 1000000000;			// minimum ESS calculated from all samples of logL
+double minESS = std::numeric_limits<double>::infinity();					// minimum ESS calculated from all samples and all parameters
+double minESS_C = std::numeric_limits<double>::infinity();				// minimum ESS calculated from all samples of C
+double minESS_R = std::numeric_limits<double>::infinity();				// minimum ESS calculated from all samples of R
+double minESS_logL = std::numeric_limits<double>::infinity();			// minimum ESS calculated from all samples of logL
 double minHD_C = 2;
 double maxHD_C = -1;
 double minHD_R = 2;
@@ -117,7 +121,7 @@ double scaleAcceptR = 2.5;				// scale parameter for autoTuneFunction (see Mathe
 
 unsigned int **n;						// matrix of unfiltered data [number of mutants][time points]
 int **outliers;							// matrix of unfiltered outliers [number of mutants][time points]
-int **ghost;							// matrix of ghosts (i.e., mutants classified as outlier)
+int *ghost;							// matrix of ghosts (i.e., mutants classified as outlier)
 int *ghostTime;							// index for points in time where ghosts are present
 int ghostSight = 0;						// bool variable that is '0' if there are no outliers in the data and '1' otherwise
 int *times;								// index for time points
@@ -141,6 +145,7 @@ bool print_ess;			// switches for output (summary)
 bool print_output;		// switches for output (output)
 bool outliersPresent;	// outliers in input file
 bool timeHours;
+bool summaryLine = false;
 
 std::string dateconst;			// string for date
 char* date;						// char for date
@@ -435,19 +440,14 @@ void initiatevariables()
 	}
 	effectiveSampleSizeR.reserve(noMutants);
 	effectiveSampleSizeC.reserve(noMutants);
-	ghost = new int *[timePoints];
-	for(int i = 0; i < timePoints; i++)
-	{
-		ghost[i] = new int[timePoints];
-	}
+	ghost = new int [timePoints];
 	
 	for(int i = 0; i < timePoints; i++)
 	{
-		for(int j = 0; j < timePoints; j++)
-		{
-			ghost[i][j] = 0;
-		}
+		ghost[i] = 0;
+		ghostTime[i] = 0;
 	}
+	
 }
 
 
@@ -493,7 +493,7 @@ void readdata(std::string datafile)
 						// this part identifies mutations with same proteinID (or same identification number) assuming that these
 						// share the same selection coefficient, which allows to include replicates and amino acid pooling readily
 						
-						if (protID.back()!= prevProtID && _tempRow != noMutants+1)		// if current protID is different to previous protID (while not having reached the last line of the data file) ...
+						if (protID.back() != prevProtID && _tempRow != noMutants+1)		// if current protID is different to previous protID (while not having reached the last line of the data file) ...
 						{
 							noDiffProtID++;													// ... increase the number of different protein IDs ...
 							diffProtIDPos.push_back(_tempRow-2);						// ... and save the position where change in protID occured (needed to identify position in r[]) ...
@@ -501,9 +501,12 @@ void readdata(std::string datafile)
 						}
 						else if (_tempRow == noMutants+1)								// for last line in data file ...
 						{
-
 							if (protID.back()!= prevProtID)									// if current protID is different to previous protID ...
 							{
+								if (protID.back() == "-1")
+								{
+									summaryLine = true;
+								}
 								noDiffProtID++;												// ... increase the number of different protein IDs ...
 								diffProtIDPos.push_back(_tempRow-2);					// ... and save the position where change in protID occured (needed to identify position in r[]) ...
 								diffProtIDPos.push_back(_tempRow-1);					// ... and add an upper limiting value
@@ -560,36 +563,36 @@ void readdata(std::string datafile)
 //
 void ghostBuster()
 {
-	int outreads[timePoints];
-
-	for (int j = 0; j < timePoints; j++)		// initilize variables
-	{
-		outreads[j] = 0;
-		ghostTime[j] = 0;
-	}
 	
 	for(int i = 0; i < noMutants; i++)			// for all mutants...
 	{
 		for(int j = 0; j < timePoints; j++)		// ... and time points
 		{
-			if (outliers[i][j] == 0)			// if mutant i at time j is classified as outlier
+			if (outliers[i][j] == 0)
 			{
-				outreads[j] += n[i][j];			// save number of mutant counts in outreads...
-				n[i][j] = 0;					// ... and set the number of mutant counts in the data to 0
+				ghost[j] += n[i][j];
+				ghostTime[j] = 1;					// ghostTime serves as an indicator variable (which is needed later) to indicate those points in time where outliers have been detected
+				n[i][j] = 0;
 			}
 		}
 	}
 	
-	
 	for (int j = 0; j < timePoints; j++)		// ghost related variables are set
 	{
-		ghost[j][j] = outreads[j];				// number of ghost mutant counts is stored
-
-		if (ghost[j][j] > 1)
+		if (ghostTime[j] == 1)
 		{
 			ghostSight++;						// ghostSight counts the number of time points for which a 'ghost row' needs to be added to the data
-			ghostTime[j] = 1;					// ghostTime serves as an indicator variable (which is needed later) to indicate those points in time where outliers have been detected
 		}
+	}
+	
+	noMutantGhosts = noMutants + ghostSight;			// sets the number of mutants and ghost
+	if (summaryLine == true)
+	{
+		noMutantsOut = noMutants - 1;
+	}
+	else
+	{
+		noMutantsOut = noMutants;
 	}
 }
 
@@ -600,7 +603,6 @@ void ghostBuster()
 //
 void initiatevariablesF()
 {
-	noMutantGhosts = noMutants+ghostSight;			// sets the number of mutants and ghost
 	
 	//initilize variables
 	nF = new unsigned int *[noMutantGhosts];
@@ -630,33 +632,42 @@ void initiatevariablesF()
 
 		}
 	}
-
+	
+	for(int i = noMutants; i < noMutantGhosts; i++)				// for all non-regular mutant counts (if there are any)
+	{
+		for (int j = 0; j < timePoints; j++)
+		{
+			nF[i][j] = 0;
+			outliersF[i][j] = 1;
+		}
+	}
  
-	int _tempToken = atoi(protID.back().c_str());		// take last protID ...
+	int _tempToken = -1;		// take last protID ...
 	for (int i = 0; i < noMutantGhosts-noMutants; i++)	// ... and add protID for ghosts
 	{
-		_tempToken++;
 		protID.push_back(convert_NumberToString(_tempToken));
 	}
-	
 	
 	int _temp = noMutants;
 	if (noMutants != noMutantGhosts)
 	{
 		for (int j = 0; j < timePoints; j++)				// for all ghosts ...
 		{
-			// nF[_temp][j] = 0;
-			// outliersF[_temp][j] = 0;
-			if (ghostTime[j]==1)
+			if (ghostTime[j] == 1)
 			{
 				for (int jj = 0; jj < timePoints; jj++)
 				{
 					if(j==jj)
 					{
-						nF[_temp][jj] = ghost[j][j];			// ... set the number of mutant counts ...
+						nF[_temp][jj] = ghost[j];			// ... set the number of mutant counts ...
 						outliersF[_temp][jj] = 1;				// ... and set the outlier matrix ...
-						c.push_back(std::max(ghost[j][j],1));	// ... and set c
+						c.push_back(std::max(ghost[j],1));	// ... and set c
 						temp_c.push_back(c[_temp]);
+					}
+					else
+					{
+						nF[_temp][jj] = 0;
+						//outliersF[_temp][jj] = 0;				// ... and set the outlier matrix ...
 					}
 				}
 				_temp++;
@@ -773,14 +784,9 @@ void initiateoutput()
 	printparameters(& MCMC_C);				// prints simulation parameters at top of the output file
 
 	MCMC_C << "#sample";
-	for(int i = 0; i < noMutants; i++)
+	for(int i = 1; i < noMutantsOut; i++)
 	{
 		MCMC_C << "\tc." << protID[i] << "-" << i+1;
-	}
-	
-	for(int i = noMutants; i < noMutantGhosts; i++)
-	{
-		MCMC_C << "\tc.-1";
 	}
 
 	MCMC_C.precision(12);
@@ -788,7 +794,7 @@ void initiateoutput()
 	MCMC_C << "\n";
 	
 	MCMC_C << "0";
-	for(int i = 0; i < noMutantGhosts; i++)
+	for(int i = 1; i < noMutantsOut; i++)
 	{
 		MCMC_C << "\t" << c[i];
 	}
@@ -825,23 +831,17 @@ void initiateoutput()
 	printparameters(& MCMC_R);
 	
 	MCMC_R << "#sample";
-	for(int i = 0; i < noMutants; i++)
+	for(int i = 1; i < noMutantsOut; i++)
 	{
 		MCMC_R << "\tr." << protID[i];
 	}
-	
-	for(int i = noMutants; i < noMutantGhosts; i++)
-	{
-		MCMC_R << "\tr.-1";
-	}
-
 	
 	MCMC_R.precision(12);
 	MCMC_R.setf (std::ios::fixed,std::ios::floatfield);
 	MCMC_R << "\n";
 	
 	MCMC_R << "0";
-	for(int i = 0; i < noMutantGhosts; i++)
+	for(int i = 1; i < noMutantsOut; i++)
 	{
 		MCMC_R << "\t" << r[i];
 	}
@@ -936,11 +936,11 @@ void initiateoutput()
 		ess.open(ess_file);
 		printparameters(& ess);
 		ess << "#sample" << "\tminESS";
-		for (int i = 0; i < noMutants; i++)
+		for (int i = 1; i < noMutantsOut; i++)
 		{
 			ess << "\tr." << protID[i];
 		}
-		for (int i = 0; i < noMutants; i++)
+		for (int i = 1; i < noMutantsOut; i++)
 		{
 			ess << "\tc." << protID[i];
 		}
@@ -1102,7 +1102,7 @@ void printparameters(std::ofstream * outfile)
 	*outfile << "\n#Subsampling " << subsampling;
 	*outfile << "\n#No Sets " << noSets;
 	*outfile << "\n#Set " << set;
-	*outfile << "\n#Total number accepted values (wo burn-in) "  << noSets*set*subsampling ;
+	*outfile << "\n#Total number accepted values (w/o burn-in) "  << noSets*set*subsampling ;
 	*outfile << "\n#Outliers detected ";
 	if(outliersPresent)
 	{
@@ -1112,7 +1112,15 @@ void printparameters(std::ofstream * outfile)
 	{
 		*outfile << "No";
 	}
-		
+	*outfile << "\n#Time measured in ";
+	if(timeHours)
+	{
+		*outfile << "hours";
+	}
+	else
+	{
+		*outfile << "generations";
+	}
 	*outfile << "\n#SD Proposal c " << jumpCSD;
 	*outfile << "\n#SD Proposal r " << jumpRSD;
 	*outfile << "\n#Skip Col " << skipCol;
@@ -1131,6 +1139,7 @@ void printPropDistScale()
 
 //***printMCMC******************************************
 //  Prints MCMC samples
+//	Only over all 'real' mutants (i.e., no the wildtype and ghosts/summary mutants)
 //
 void printMCMC()
 {
@@ -1139,7 +1148,7 @@ void printMCMC()
 	{
 		MCMC_C << i + _nSample - set + 1;
 		
-		for (int j = 0; j < noMutantGhosts; j++)
+		for (int j = 1; j < noMutantsOut; j++)
 		{
 			MCMC_C << "\t" << (cSetData[i])[j];
 		}
@@ -1151,7 +1160,7 @@ void printMCMC()
 	{
 		MCMC_R << i + _nSample - set + 1;
 		
-		for (int j = 0; j < noMutantGhosts; j++)
+		for (int j = 1; j < noMutantsOut; j++)
 		{
 			MCMC_R << "\t" << (rSetData[i])[j];
 		}
@@ -1182,11 +1191,11 @@ void printlogLTS()
 void printess()
 {
 	ess << _nSample << "\t" << minESS;
-	for (int i = 0; i < noMutants; i++)
+	for (int i = 1; i < noMutantsOut; i++)
 	{
 		ess << "\t" << effectiveSampleSizeR[i];
 	}
-	for (int i = 0; i < noMutants; i++)
+	for (int i = 1; i < noMutantsOut; i++)
 	{
 		ess << "\t" << effectiveSampleSizeC[i];
 	}
@@ -1210,7 +1219,6 @@ void proposalDistR(double sD)
 			temp_r[diffProtIDPos[i]] = 0;
 		}
 		
-		
 		for (int j = diffProtIDPos[i]+1; j < diffProtIDPos[i+1]; j++)	// for all mutants with the same protID assign the same value
 		{
 			temp_r[j] = temp_r[diffProtIDPos[i]];
@@ -1231,13 +1239,21 @@ void proposalDistR(double sD)
 //***proposaldistc******************************************
 //	Proposes a new value for 'c' drawn from a Cauchy
 //	Distribution with mean log(c) and scale parameter sD
+//	Only consider real mutants (i.e., not the wild-type and ghosts)
 //
 void proposalDistC(double sD)
 {
 	for (int i = 1; i < noMutants; i++)
 	{
 		temp_c[i] = exp(log(c[i]) + randcauchy(sD));
-		if(temp_c[i] > 100000000) temp_c[i] = 100000000;
+		if(temp_c[i] > 100000000)
+		{
+			temp_c[i] = 100000000;
+		}
+		else if (temp_c[i] <= 0)
+		{
+			temp_c[i] = 1.;
+		}
 	}
 
 }
@@ -1271,7 +1287,7 @@ double computeLikelihood(std::vector<double> c, std::vector<double> r)
 		{
 			for (int j = 0; j < timePoints; j++)							// ... and all points in time...
 			{
-				prob[i][j] = c[i]*exp(r[i]*times[j])*outliersF[i][j];	// ... calculate the number of expected mutant counts given the initial mutant count and the growth rate r (scaled by generation time).
+				prob[i][j] = c[i]*exp(r[i]*times[j])*outliersF[i][j];	// ... calculate the number of expected mutant counts given the initial mutant count and the growth rate r (scaled by time).
 			}																// after normalization this yields the probability to observe mutant (or ghost) 'i' at time 'j'
 		}
 		
@@ -1403,7 +1419,7 @@ void calculateESS()
 	minESS_R = _nSample;
 	minESS_C = _nSample;
 	minESS_logL = _nSample;
-	for (int i = 1; i < noMutants; i++)
+	for (int i = 1; i < noMutantsOut; i++)
 	{
 		effectiveSampleSizeR[i] = GSL_MIN(_nSample,_nSample/(calculateAutoCorrelationTime(0, i)));
 		minESS_R = std::min(effectiveSampleSizeR[i],minESS_R);
@@ -1557,7 +1573,7 @@ void MCMCDiagnostic(int noBatches, int minSampleSize)
 		double _dataC[_nSample];
 		double _dataL[logLData.size()];
 		initiateoutputMCMCDiagnostic(noBatches, minSampleSize);
-		for (int i = 0; i < noMutants; i++)										// only calculated for 'real data', i.e., no ghosts
+		for (int i = 1; i < noMutantsOut; i++)										// only calculated for 'real data', i.e., no wild-type, ghosts, or summary mutants
 		{
 			minHD_C = 2;
 			maxHD_C = -1;
@@ -1663,7 +1679,7 @@ void MCMCDiagnostic(int noBatches, int minSampleSize)
 		double _dataR[_nSample];
 		double _dataC[_nSample];
 		double _dataL[logLData.size()];
-		for (int i = 0; i < noMutants; i++)										// only calculated for 'real data', i.e., no ghosts
+		for (int i = 1; i < noMutantsOut; i++)										// only calculated for 'real data', i.e., no wildtype, ghosts and summary mutants
 		{
 			MCMCDiagnostics_R << protID[i] << "\t";
 			MCMCDiagnostics_R << i+1 << "\t";
@@ -1762,7 +1778,7 @@ void printMCMC_Q()
 {
 	
 	double _data[_nSample];
-	for (int i = 0; i < noMutants; i++)
+	for (int i = 1; i < noMutantsOut; i++)
 	{
 		for (int j = 0; j < _nSample; j++)
 		{
@@ -1965,11 +1981,6 @@ void recycle()
 	{
 		delete[] n[i];
 		delete[] outliers[i];
-	}
-	
-	for(int i = 0; i < timePoints; i++)
-	{
-		delete [] ghost[i];
 	}
 	
 	delete[] n;
