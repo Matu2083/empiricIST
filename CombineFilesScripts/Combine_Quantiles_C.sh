@@ -23,7 +23,7 @@ mkdir QCFiles
 cp *$suffixFileName\_C_quantiles.txt QCFiles
 cd QCFiles/
 
-head -n 14 $prefixFileName-1-$suffixFileName\_C_quantiles.txt | tail -1 | cut -f1,3- > FirstLineQC.txt
+head -n 15 $prefixFileName-1-$suffixFileName\_C_quantiles.txt | tail -1 | cut -f1,3- > FirstLineQC.txt
 
 for (( j=1; j<=$maxIndex; j++ ))
 	do

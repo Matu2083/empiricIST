@@ -27,7 +27,7 @@ cd CFiles/
 # For each file remove the simulation parameter information (first 14 lines) and cut the first two columns (i.e., the number of samples and the reference) and the last 'cutlast' columns that contain non-informative (but necessary) samples (as indicated by the c.-1 column name; i.e., either 'ghosts' or summary lines).
 for (( j=1; j<=$maxIndex; j++ ))
 	do
-		tail -n+14 $prefixFileName-$j-$suffixFileName\_C.txt > MCMC-$j-DFE_C.txt
+		tail -n+15 $prefixFileName-$j-$suffixFileName\_C.txt > MCMC-$j-DFE_C.txt
 		cutlast=$(head -n 1 MCMC-$j-DFE_C.txt | grep -o "c.-1" | wc -l)
 		((cutlast++))
 		cut -f 3- MCMC-$j-DFE_C.txt > MCMC2-$j-DFE_C.txt

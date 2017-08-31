@@ -23,7 +23,7 @@ mkdir QRFiles
 cp *$suffixFileName\_R_q* QRFiles
 cd QRFiles/
 
-head -n 14 $prefixFileName-1-$suffixFileName\_R_quantiles.txt | tail -1 | cut -f1,3- > FirstLineQR.txt
+head -n 15 $prefixFileName-1-$suffixFileName\_R_quantiles.txt | tail -1 | cut -f1,3- > FirstLineQR.txt
 
 for (( j=1; j<=$maxIndex; j++ ))
 	do

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# This program concatenates simulation results from split (grouped) data -- in particular calculated Hellinger distances for the initial population size.
-# It takes 4 input arguments ('pathToData' 'prefixFileName' 'suffixFileName' 'maxIndex') and returns a single file that contains all sampled growth rates for all mutants
+# This program concatenates simulation results from split (grouped) data.
+# It takes 4 input arguments ('pathToData' 'prefixFileName' 'suffixFileName' 'maxIndex') and returns a single file that contains all sampled growth rates for all mutants.
 
 # Check if arguments have been passed. If not exit and display error message
 args=("$@")
@@ -27,7 +27,7 @@ cd RFiles/
 # Paste all individual files and create a single file. 
 for (( j=1; j<=$maxIndex; j++ ))
 	do
-		tail -n+14 $prefixFileName-$j-$suffixFileName\_R.txt > MCMC-$j-DFE_R.txt
+		tail -n+15 $prefixFileName-$j-$suffixFileName\_R.txt > MCMC-$j-DFE_R.txt
 		cutlast=$(head -n 1 MCMC-$j-DFE_R.txt | grep -o -E "r.-1|r.-0" | wc -l)
 		((cutlast++))
 		cut -f 3- MCMC-$j-DFE_R.txt > MCMC2-$j-DFE_R.txt

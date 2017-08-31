@@ -23,7 +23,7 @@ mkdir RDiag
 cp *$suffixFileName\_Diag_R.txt RDiag
 cd RDiag/
 
-head -n 14 $prefixFileName-1-$suffixFileName\_Diag_R.txt | tail -1 | cut -f1,3- > FirstLineDiagR.txt
+head -n 15 $prefixFileName-1-$suffixFileName\_Diag_R.txt | tail -1 | cut -f1,3- > FirstLineDiagR.txt
 
 for (( j=1; j<=$maxIndex; j++ ))
 	do

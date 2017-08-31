@@ -20,7 +20,7 @@ cd $pathToData
 # For each file remove the simulation parameter information (first 14 lines) and cut the first two columns (i.e., the number of samples and the reference) and the last 'cutlast' columns that contain non-informative (but necessary) samples (as indicated by the r.-1 column name; i.e., either 'ghosts' or summary lines).
 # Paste all individual files and create a single file. 
 
-tail -n+14 $fileName.txt > $fileName\_TailShapeFile.txt
+tail -n+15 $fileName.txt > $fileName\_TailShapeFile.txt
 cutlast=$(head -n 1 $fileName\_TailShapeFile.txt | grep -o -E "r.-1|r.-0" | wc -l)
 ((cutlast++))
 cut -f 3- $fileName\_TailShapeFile.txt > $fileName\_TailShapeFileTemp.txt

@@ -23,7 +23,7 @@ mkdir CDiag
 cp *$suffixFileName\_Diag_C.txt CDiag
 cd CDiag/
 
-head -n 14 $prefixFileName-1-$suffixFileName\_Diag_C.txt | tail -1 | cut -f1,3- > FirstLineDiagC.txt
+head -n 15 $prefixFileName-1-$suffixFileName\_Diag_C.txt | tail -1 | cut -f1,3- > FirstLineDiagC.txt
 
 for (( j=1; j<=$maxIndex; j++ ))
 	do

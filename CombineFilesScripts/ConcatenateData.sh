@@ -32,7 +32,7 @@ fi
 
 perl $pathToPerlRename/rename.pl 's/(.*_)\d*_\d*_\d*_\d*_(.*txt)/$1$2/g' $pathToData/$prefixFileName-*
 
-tail -n+14 $pathToData/$prefixFileName-1-$suffixFileName\_$simIdentifier.txt | head -1 > $pathToData/MCMC-Concatenate-$suffixFileName\_$simIdentifier.txt
+tail -n+15 $pathToData/$prefixFileName-1-$suffixFileName\_$simIdentifier.txt | head -1 > $pathToData/MCMC-Concatenate-$suffixFileName\_$simIdentifier.txt
 
 for (( j=1; j<=$maxIndex; j++ ))
 	do 
