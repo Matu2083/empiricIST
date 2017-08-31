@@ -30,7 +30,7 @@ _randomNumberSeed=0																				# Option to pass the random number seed. 
 
 	if [ -n "$_prefix" ]
 	then
-		_prefix="-prefix $_prefic"
+		_prefix="-prefix $_prefix"
 	fi
 
 	if [ $_outliers == 0 ]
@@ -127,7 +127,7 @@ _randomNumberSeed=0																				# Option to pass the random number seed. 
 	#	EXECUTION
 	#***************
 
-	./$_pathToProgram -file $_pathToDataFile $_outputFileName -skipCol $_noSkipColumns $_outliers $_burnin $_subsampling $_noSets $_set $_popSizeSD $_growthRateSD $_initial $_logLTS $_ESS $_screen $_hours $_seed
+	./$_pathToProgram -file $_pathToDataFile $_prefix -skipCol $_noSkipColumns $_outliers $_burnin $_subsampling $_noSets $_set $_popSizeSD $_growthRateSD $_initial $_logLTS $_ESS $_screen $_hours $_seed
 
 
 exit 0
