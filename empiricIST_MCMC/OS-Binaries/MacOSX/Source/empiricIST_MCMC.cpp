@@ -363,9 +363,9 @@ void printHelpMessage()
 	
 	std::cout << std::setw(20) << "-burnin INT"           << "  --  " << "Number of accepted values that are discarded (burn-in period)." << std::endl;
 	std::cout << std::setw(26) << " "                               << "During the burn-in period the parameters of the proposal distribution are adjusted. By default 100,000 is used." << std::endl;
-	std::cout << std::setw(20) << "-subsampling INT"           << "  --  " << "After the burn-in period only every 'subSampling' accepted value is recorded (i.e., written to file)." << std::endl;
+	std::cout << std::setw(20) << "-subsampling INT"           << "  --  " << "After the burn-in period only every 'subsampling' accepted value is recorded (i.e., written to file)." << std::endl;
 	std::cout << std::setw(26) << " "                               << "By default 1,000 is used." << std::endl;
-	std::cout << std::setw(20) << "-noSets INT"           << "  --  " << "Number of output data sets that are recorded each of size 'setSize'." << std::endl;
+	std::cout << std::setw(20) << "-noSets INT"           << "  --  " << "Number of output data sets that are recorded each of size 'noSets'." << std::endl;
 	std::cout << std::setw(26) << " "                               << "By default 10 is used." << std::endl;
 	std::cout << std::setw(20) << "-set INT"           << "  --  " << "Number of recorded samples per set." << std::endl;
 	std::cout << std::setw(26) << " "                               << "By default 1,000 is used." << std::endl;

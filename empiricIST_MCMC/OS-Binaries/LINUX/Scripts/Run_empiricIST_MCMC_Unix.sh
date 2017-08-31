@@ -6,23 +6,24 @@
 #**************************************************************************************
 
 
-_pathToProgram=/Path/To/Program/empiricIST_MCMC.out												# Pass the name of the compiled MCMC_DFE program
+_pathToProgram=/Path/To/Program/empiricIST_MCMC.out												# Pass the path and name of the compiled empiricIST_MCMC program
 _pathToDataFile=/Path/To/DataFile.csv															# The path to and the name of the data file
-_prefix=""																						# The outfile name: outfiles will be of the form 'datafileName'_'_outputFileName'_'statistic'.txt and put in the same folder as the datafile
+_prefix=""																						# Specify the ouput file prefix. By default "DFE"
 _skipCol=10																						# Number of columns to skip until read data starts
-_outliers=0																						# Has an outlier check be performed? 0: No; 1:Yes
-_burnin=-1																						# Number of accepted samples that will be discarded. during burn-in period the parameters of the proposal distribution are adjusted
-_subsampling=-1																					# Only every 'subsampling' accepted sample will be recorded in order to reduce autocorrelation between recorded samples
-_noSets=-1																						# Number of data sets that are recorded each of size '_setSize'
-_set=-1																							# Number of recorded samples per set. The total chain length is given by '_burnin'+'noSets'*'_setSize'*'_subSampling'
-_popSizeSD=-1																					# Scale parameter of the proposal distribution of initial population sizes 'c'
-_growthRateSD=-1				 																# Standard deviation of the proposal distribution of growth rates 'r'
+_outliers=0																						# Does the data file contain an outlier matrix? 0: No; 1:Yes. By default no
+_burnin=-1																						# Number of accepted values that are discarded (burn-in period). During the burn-in period the parameters of the proposal distribution are adjusted. By default 100,000 is used
+_subsampling=-1																					# After the burn-in period only every 'subsampling' accepted value is recorded (i.e., written to file). By default 1,000 is used
+_noSets=-1																						# Number of output data sets that are recorded each of size 'noSets'. By default 10 is used
+_set=-1																							# Number of recorded samples per set. By default 1,000 is used
+_popSizeSD=-1																					# Standard deviation of the proposal distribution of initial population sizes 'c' drawn from a Cauchy distribution. By default 0.00002 is used
+_growthRateSD=-1				 																# Standard deviation of the proposal distribution of growth rates 'r' drawn from a Gaussian distribution. By default 0.00004 is used
 _initial=""																						# The path to and the name to the (optional) initialize file
-_logLTS=0																						# Should the time series of log likelihoods be recorded? 0: No; 1:Yes
-_ESS=0																							# Should the ESS be printed every '_setSize' generations? 0: No; 1:Yes
-_screen=0																						# Should output be printed to screen? 0: No; 1:Yes
-_hours=0																						# Time measured in hours (1)?
-_randomNumberSeed=0																				# Option to pass the random number seed. If -1: a random number seed will be set automatically based on computer run time
+_logLTS=0																						# Should the time series of log likelihoods be recorded? 0: No; 1:Yes. By default no
+_ESS=0																							# Should the ESS be printed every '_set' generations? 0: No; 1:Yes. By default no
+_screen=0																						# Should output be printed to screen? 0: No; 1:Yes. By default no
+_hours=0																						# Are time points measured in hours? 0: No (generation time); 1: Yes. By default generation time is assumed
+_seed=0																							# User defined random number seed. If seed == -1 (i.e., the default) the random seed is automatically generated from computer time
+
 
 	#********************
 	#	PARSING INPUT
