@@ -3,23 +3,23 @@
 # further details please refer to the manual.										*
 #************************************************************************************
 
-$_nameOfProgram="C:\Users\Sebastian\Documents\MCMC_DFE\Testing\empiricIST_MCMC.exe"																	# Pass the name of the compiled MCMC_DFE program
-$_pathToDataFile="C:\Users\Sebastian\Documents\MCMC_DFE\Testing\reads_test.csv"			# The path to and the name of the data file
-$_prefix=""																	# The outfile name: outfiles will be of the form 'datafileName'_'_outputFileName'_'statistic'.txt and put in the same folder as the datafile
-[int]$_skipCol=11																		# Number of columns to skip until read data starts
-[int]$_outliers=0																		# Has an outlier check be performed? 0: No; 1:Yes
-[int]$_burnin=-1																			# Number of accepted samples that will be discarded. during burn-in period the parameters of the proposal distribution are adjusted
-[int]$_subsampling=-1																		# Only every 'subsampling' accepted sample will be recorded in order to reduce autocorrelation between recorded samples
-[int]$_noSets=-1																				# Number of data sets that are recorded each of size '_setSize'
-[int]$_set=-1																			# Number of recorded samples per set. The total chain length is given by '_burnin'+'noSets'*'_setSize'*'_subSampling'
-[System.Decimal]$_popSizeSD=-1															# Scale parameter of the proposal distribution of initial population sizes 'c'
-[System.Decimal]$_growthRateSD=-1																# Standard deviation of the proposal distribution of growth rates 'r'
-$_initial=""																			# Provides an alternative way to initialize the growth rates 'r', the initial population sizes 'c' and to (optionally) set the parameters of the proposal distributions (e.g. to continue an MCMC that has not been run long enough from the previous accepted sample. Note that for this the burn-in has to be set to 0.). If -1, the default is used for initialization.
-[int]$_logLTS=0																# Should the time series of log likelihoods be recorded? 0: No; 1:Yes
-[int]$_ESS=0																			# Should the ESS be printed every '_setSize' generations? 0: No; 1:Yes
-[int]$_screen=0																# Should output be printed to screen? 0: No; 1:Yes
-[int]$_hours=0																	# Should every output line (printed to screen) be overwritten? 0: No; 1:Yes
-[int]$_seed=0																	# Option to pass the random number seed. If -1: a random number seed will be set automatically based on computer run time
+$_nameOfProgram="C:\Path\To\Program\empiricIST_MCMC.exe"																	# Pass the path and name of the compiled empiricIST_MCMC program
+$_pathToDataFile="C:\Path\To\DataFile.csv"			# The path to and the name of the data file
+$_prefix=""																	# Specify the ouput file prefix. By default "DFE"
+[int]$_skipCol=10																		# Number of columns to skip until read data starts
+[int]$_outliers=0																		# Does the data file contain an outlier matrix? 0: No; 1:Yes. By default no
+[int]$_burnin=-1																			# Number of accepted values that are discarded (burn-in period). During the burn-in period the parameters of the proposal distribution are adjusted. By default 100,000 is used during burn-in period the parameters of the proposal distribution are adjusted
+[int]$_subsampling=-1																		# After the burn-in period only every 'subsampling' accepted value is recorded (i.e., written to file). By default 1,000 is used
+[int]$_noSets=-1																				# Number of output data sets that are recorded each of size 'noSets'. By default 10 is used
+[int]$_set=-1																			# Number of recorded samples per set. By default 1,000 is used
+[System.Decimal]$_popSizeSD=-1															# Standard deviation of the proposal distribution of initial population sizes 'c' drawn from a Cauchy distribution. By default 0.00002 is used
+[System.Decimal]$_growthRateSD=-1																# Standard deviation of the proposal distribution of growth rates 'r' drawn from a Gaussian distribution. By default 0.00004 is used
+$_initial=""																			# The path to and the name to the (optional) initialize file
+[int]$_logLTS=0																# Should the time series of log likelihoods be recorded? 0: No; 1:Yes. By default no
+[int]$_ESS=0																			# Should the ESS be printed every '_set' generations? 0: No; 1:Yes. By default no
+[int]$_screen=0																# Should output be printed to screen? 0: No; 1:Yes. By default no
+[int]$_hours=0																	# Are time points measured in hours? 0: No (generation time); 1: Yes. By default generation time is assumed
+[int]$_seed=0																	# User defined random number seed. If seed == -1 (i.e., the default) the random seed is automatically generated from computer time
 
 	#*******************
 	#	PARSING INPUT	
