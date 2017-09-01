@@ -4,7 +4,7 @@ CFLAGS=-c -O3 -DVERSION=\"${VERSION}\"
 LDFLAGS=-lgsl -lgslcblas
 SOURCES=empiricIST_MCMC.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=empiricIST_MCMC_Cygwin.exe
+EXECUTABLE=empiricIST_MCMC.exe
 
 all: $(SOURCES) $(EXECUTABLE) 
 	
