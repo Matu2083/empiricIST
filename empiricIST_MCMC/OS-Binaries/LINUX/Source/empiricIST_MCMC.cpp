@@ -365,7 +365,7 @@ void printHelpMessage()
 	std::cout << std::setw(26) << " "                               << "During the burn-in period the parameters of the proposal distribution are adjusted. By default 100,000 is used." << std::endl;
 	std::cout << std::setw(20) << "-subsampling INT"           << "  --  " << "After the burn-in period only every 'subsampling' accepted value is recorded (i.e., written to file)." << std::endl;
 	std::cout << std::setw(26) << " "                               << "By default 1,000 is used." << std::endl;
-	std::cout << std::setw(20) << "-noSets INT"           << "  --  " << "Number of output data sets that are recorded each of size 'noSets'." << std::endl;
+	std::cout << std::setw(20) << "-noSets INT"           << "  --  " << "Number of output data sets that are recorded each of size 'set'." << std::endl;
 	std::cout << std::setw(26) << " "                               << "By default 10 is used." << std::endl;
 	std::cout << std::setw(20) << "-set INT"           << "  --  " << "Number of recorded samples per set." << std::endl;
 	std::cout << std::setw(26) << " "                               << "By default 1,000 is used." << std::endl;
@@ -420,13 +420,13 @@ void checkArgvInput()
 	
 	if(jumpCSD <= 0)
 	{
-		std::cout << "Error: jumpCSD = " << jumpCSD << ". See ReadMe file for input arguments.\n";
+		std::cout << "Error: popSizeSD = " << jumpCSD << ". See ReadMe file for input arguments.\n";
 		exit(1);
 	}
 	
 	if(jumpRSD <= 0)
 	{
-		std::cout << "Error: jumpRSD = " << jumpRSD << ". See ReadMe file for input arguments.\n";
+		std::cout << "Error: growthRateSD = " << jumpRSD << ". See ReadMe file for input arguments.\n";
 		exit(1);
 	}
 	
@@ -746,11 +746,11 @@ void initiatevariablesF()
 	if (initializeSet == true)
 	{
 		char read_name[255];
-		strcpy (read_name, convert_StringToChar(outfile_prefix));
-		strcat (read_name, NAVIGATE);
-		strcat (read_name, datafileName.c_str());
-		strcat (read_name, "_");
-		strcat (read_name, _initialRC.c_str());
+		strcpy (read_name, convert_StringToChar(_initialRC));
+//		strcat (read_name, NAVIGATE);
+//		strcat (read_name, datafileName.c_str());
+//		strcat (read_name, "_");
+//		strcat (read_name, _initialRC.c_str());
 		
 		std::ifstream inputRCread;
 		std::string token;
@@ -947,7 +947,7 @@ void initiateoutput()
 	propDistScales.open(MCMC_Scales_file);
 	printparameters(& propDistScales);
 	
-	propDistScales << "#acceptRatio" << "\tjumpSDC" << "\tjumpSDR\n";
+	propDistScales << "#acceptRatio" << "\tpopSizeSD" << "\tgrowthRateSD\n";
 	
 	propDistScales.precision(12);
 	propDistScales.setf (std::ios::fixed,std::ios::floatfield);

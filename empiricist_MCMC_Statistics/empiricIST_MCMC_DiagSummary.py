@@ -7,7 +7,6 @@ Usage: python empiricIST_MCMC_DiagSummary.py [options]
 Options:
 	-h, --help                        show this help
 	-f ..., --file=...                use specified raw input file
-	-s ..., --samples=...             provide the number of samples for which statistics have been calculated
 	
 Examples:
 	empiricIST_MCMC_DiagSummary.py -f MCMCOutputFile                    generates the empiricIST_MCMC Diagnostic Summary output
@@ -34,6 +33,7 @@ from collections import defaultdict
 import numpy as np
 import scipy as sp
 import re
+import os
 
 _inputFile = -1
 _noSamples = -1
@@ -48,7 +48,7 @@ def usage():
 
 def main(argv):
 	try:
-		opts, args = getopt.getopt(argv, "hf:s:", ["help", "file=", "samples="])
+		opts, args = getopt.getopt(argv, "hf:", ["help", "file="])
 	except getopt.GetoptError:
 		usage()
 		sys.exit(2)
@@ -79,7 +79,7 @@ if __name__ == "__main__":
 	main(sys.argv[1:])
 
 	#reads data
-	def readDatalogLTS(inputFile, noSamples):
+	def readDatalogLTS(inputFile):
 		_inputFile = inputFile + "_logLTS.txt"
 		with open(_inputFile, 'rU') as csvfile:
 			dialect = csv.Sniffer().sniff(csvfile.readline(), [',',';','\t'])
@@ -93,10 +93,10 @@ if __name__ == "__main__":
 		csvfile.close()
 		posESS = next(i for i in xrange(len(fieldnames)-1) if fieldnames[i] == "ESS")
 		_minLogLST = data[posESS-1]
-		
-		return (_minLogLST)
 
-	def readDataC(inputFile, noSamples):
+		return (_minLogLST,noSamples)
+
+	def readDataC(inputFile):
 		_inputFile = inputFile + "_C.txt"
 		with open(_inputFile, 'rU') as csvfile:
 			dialect = csv.Sniffer().sniff(csvfile.readline(), [',',';','\t'])
@@ -111,11 +111,11 @@ if __name__ == "__main__":
 		csvfile.close()
 		posESS = next(i for i in xrange(len(fieldnames)-1) if fieldnames[i] == "ESS")
 		_minC = min(data[posESS])
-	
-		return (_minC)
+		
+		return (_minC,noSamples)
 
 
-	def readDataR(inputFile, noSamples):
+	def readDataR(inputFile):
 		_inputFile = inputFile + "_R.txt"
 		with open(_inputFile, 'rU') as csvfile:
 			dialect = csv.Sniffer().sniff(csvfile.readline(), [',',';','\t'])
@@ -130,8 +130,8 @@ if __name__ == "__main__":
 		csvfile.close()
 		posESS = next(i for i in xrange(len(fieldnames)-1) if fieldnames[i] == "ESS")
 		_minR = min(data[posESS])
-		
-		return (_minR)
+
+		return (_minR,noSamples)
 
 #writing input file (csv format)
 	def writeCSVDiagSummary(_minLogLST, _minC, _minR, noSamples, inputFile):
@@ -140,6 +140,7 @@ if __name__ == "__main__":
 
 		_fieldnamesOut = ['#samples','minESS(c)','maxACC(c)','minESS(r)','maxACC(r)','minESS(logL)','maxACC(logL)','minESS(all)','maxACC(all)']
 		_fileName = inputFile + "_summary.txt"
+
 		_maxACC_logLTS = (noSamples/_minLogLST-1)/2
 		_maxACC_C = (noSamples/_minC-1)/2
 		_maxACC_R = (noSamples/_minR-1)/2
@@ -153,10 +154,14 @@ if __name__ == "__main__":
 		csvfileOut.close()
 
 	#### HERE IS WHERE ALL THE MAGIC HAPPENS
-	_minLogLST = readDatalogLTS(_inputFile, _noSamples)
-	_minC = readDataC(_inputFile, _noSamples)
-	_minR = readDataR(_inputFile, _noSamples)
+	if( os.path.isfile("./"+_inputFile+"_logLTS.txt") && os.path.isfile("./"+_inputFile+"_C.txt") && os.path.isfile("./"+_inputFile+"_C.txt")):
+		_minLogLST = readDatalogLTS(_inputFile)
+		_minC = readDataC(_inputFile)
+		_minR = readDataR(_inputFile)
 
-	writeCSVDiagSummary(_minLogLST, _minC, _minR, _noSamples, _inputFile)
+		writeCSVDiagSummary(_minLogLST, _minC, _minR, _noSamples, _inputFile)
+	else:
+		print "Could not find all individual files necessary (logLTS, R, C)."
+		sys.exit(2)
 
 	#### END OF PROGRAMM

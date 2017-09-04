@@ -7,7 +7,7 @@
 
 
 _pathToProgram=/Path/To/Program/empiricIST_MCMC.out												# Pass the path and name of the compiled empiricIST_MCMC program
-_pathToDataFile=/Path/To/DataFile.csv															# The path to and the name of the data file
+_pathToDataFile=/cygdrive/c/Path/To/DataFile.csv															# The path to and the name of the data file
 _prefix=""																						# Specify the ouput file prefix. By default "DFE"
 _skipCol=10																						# Number of columns to skip until read data starts
 _outliers=0																						# Does the data file contain an outlier matrix? 0: No; 1:Yes. By default no
