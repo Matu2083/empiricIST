@@ -1,5 +1,6 @@
 \relax 
 \providecommand\hyper@newdestlabel[2]{}
+\providecommand*\new@tpo@label[2]{}
 \providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
 \HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
 \global\let\oldcontentsline\contentsline
@@ -23,11 +24,12 @@
 \@writefile{lot}{\select@language{english}}
 \citation{BanHW14}
 \citation{BanHW14}
-\citation{MatJB15}
+\citation{FraMJ17}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{3}{section.1}}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Input data}{3}{section.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}\texttt  {empiricIST\char `_MCMC\char `_Input}.py}{3}{subsection.2.1}}
 \citation{BanHW14}
-\citation{MatJB15}
+\citation{FraMJ17}
 \gdef \LT@i {\LT@entry 
     {1}{92.14156pt}\LT@entry 
     {1}{83.13188pt}\LT@entry 
@@ -35,75 +37,75 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Schematic illustration of the minimal data needed to run the \texttt  {empiricIST\char `_MCMC} program. \relax }}{4}{figure.caption.2}}
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{fig:RawInput}{{1}{4}{Schematic illustration of the minimal data needed to run the \texttt {empiricIST\char `_MCMC} program. \relax }{figure.caption.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}\texttt  {empiricIST\char `_MCMC\char `_Input}.py}{4}{subsection.2.1}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces A summary of the options of the \texttt  {empiricIST\char `_MCMC\char `_Input.py} program.}}{4}{table.1}}
-\newlabel{tbl:tablePythonOptions}{{1}{4}{A summary of the options of the \texttt {empiricIST\char `_MCMC\char `_Input.py} program}{table.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Schematic illustration of the output produced by the python program and which serves as input for the MCMC simulation program. This input data has been created using the minimal raw data shown in Fig.~\ref  {fig:RawInput}, where the first five bases and the last base have been discarded (barcodes; '-l' and '-t' option). DNA sequences ('seq' column) have been translated to amino acids ('aa' column) and pooled ('-p' option), such that identical amino acid sequences have the same protein ID ('protID' column). Estimates of the growth rates 'r' ('r' column) and the selection coefficient 's' ('s' column) along with the $95\%$-confidence intervals are based on the log-linear regression (where 'rCIL' and 'rCIU' give the lower and upper boundary of the confidence interval for the growth rate r, respectively. Notation is analogous for the selection coefficient 's'.). Please note, that while the MCMC simulation program assumes that mutants with identical sequence information (i.e., for sequences with identical 'protID') evolve at the same growth rate, log-linear estimates for 'r' and 's' are based on individual mutants. The columns '4.8', '7.2', '9.6', '12', '16.8', and '26.4' give the number of sequencing reads obtained from sampling at these time points for each mutant (row). If the '-o detect'-option is invoked, the matrix of sequencing reads is followed by an outlier matrix for the corresponding time points and mutants, where '0' indicate data points that where classified as outliers.\relax }}{7}{figure.caption.3}}
-\newlabel{fig:PythonOutput}{{2}{7}{Schematic illustration of the output produced by the python program and which serves as input for the MCMC simulation program. This input data has been created using the minimal raw data shown in Fig.~\ref {fig:RawInput}, where the first five bases and the last base have been discarded (barcodes; '-l' and '-t' option). DNA sequences ('seq' column) have been translated to amino acids ('aa' column) and pooled ('-p' option), such that identical amino acid sequences have the same protein ID ('protID' column). Estimates of the growth rates 'r' ('r' column) and the selection coefficient 's' ('s' column) along with the $95\%$-confidence intervals are based on the log-linear regression (where 'rCIL' and 'rCIU' give the lower and upper boundary of the confidence interval for the growth rate r, respectively. Notation is analogous for the selection coefficient 's'.). Please note, that while the MCMC simulation program assumes that mutants with identical sequence information (i.e., for sequences with identical 'protID') evolve at the same growth rate, log-linear estimates for 'r' and 's' are based on individual mutants. The columns '4.8', '7.2', '9.6', '12', '16.8', and '26.4' give the number of sequencing reads obtained from sampling at these time points for each mutant (row). If the '-o detect'-option is invoked, the matrix of sequencing reads is followed by an outlier matrix for the corresponding time points and mutants, where '0' indicate data points that where classified as outliers.\relax }{figure.caption.3}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Usage}{8}{section.3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Compilation}{8}{subsection.3.1}}
-\@writefile{toc}{\contentsline {subparagraph}{\nonumberline Compilation and installation of the gsl-library from source}{9}{section*.7}}
-\@writefile{toc}{\contentsline {subparagraph}{\nonumberline Compilation of the MCMC}{10}{section*.8}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Execution}{11}{subsection.3.2}}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline Cygwin}{11}{section*.12}}
-\@writefile{toc}{\contentsline {paragraph}{\nonumberline Powershell}{12}{section*.13}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces A summary of the options of the \texttt  {empiricIST\char `_MCMC\char `_Input.py} program.\relax }}{4}{table.1}}
+\newlabel{tbl:tablePythonOptions}{{1}{4}{A summary of the options of the \texttt {empiricIST\char `_MCMC\char `_Input.py} program.\relax }{table.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Usage}{6}{section.3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Compilation}{6}{subsection.3.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Schematic illustration of the output produced by the python program (which serves as input for the MCMC simulation program). This input data has been created using the minimal raw data shown in Fig.~\ref  {fig:RawInput}, where the first five bases and the last base have been discarded (barcodes; '-l' and '-t' option). DNA sequences ('seq' column) have been translated to amino acids ('aa' column) and pooled ('-p' option), such that identical amino acid sequences have the same protein ID ('protID' column). Estimates of the growth rates 'r' ('r' column) and the selection coefficient 's' ('s' column) along with the $95\%$-confidence intervals are based on the log-linear regression (where 'rCIL' and 'rCIU' give the lower and upper boundary of the confidence interval for the growth rate r, respectively. Notation is analogous for the selection coefficient 's'.). Please note, that while the MCMC simulation program assumes that mutants with identical sequence information (i.e., for sequences with identical 'protID') evolve at the same growth rate, log-linear estimates for 'r' and 's' are based on individual mutants. The columns '4.8', '7.2', '9.6', '12', '16.8', and '26.4' give the number of sequencing reads obtained from sampling at these time points for each mutant (row). If the '-o detect'-option is invoked, the matrix of sequencing reads is followed by an outlier matrix for the corresponding time points and mutants, where '0' indicate data points that where classified as outliers.\relax }}{7}{figure.caption.3}}
+\newlabel{fig:PythonOutput}{{2}{7}{Schematic illustration of the output produced by the python program (which serves as input for the MCMC simulation program). This input data has been created using the minimal raw data shown in Fig.~\ref {fig:RawInput}, where the first five bases and the last base have been discarded (barcodes; '-l' and '-t' option). DNA sequences ('seq' column) have been translated to amino acids ('aa' column) and pooled ('-p' option), such that identical amino acid sequences have the same protein ID ('protID' column). Estimates of the growth rates 'r' ('r' column) and the selection coefficient 's' ('s' column) along with the $95\%$-confidence intervals are based on the log-linear regression (where 'rCIL' and 'rCIU' give the lower and upper boundary of the confidence interval for the growth rate r, respectively. Notation is analogous for the selection coefficient 's'.). Please note, that while the MCMC simulation program assumes that mutants with identical sequence information (i.e., for sequences with identical 'protID') evolve at the same growth rate, log-linear estimates for 'r' and 's' are based on individual mutants. The columns '4.8', '7.2', '9.6', '12', '16.8', and '26.4' give the number of sequencing reads obtained from sampling at these time points for each mutant (row). If the '-o detect'-option is invoked, the matrix of sequencing reads is followed by an outlier matrix for the corresponding time points and mutants, where '0' indicate data points that where classified as outliers.\relax }{figure.caption.3}{}}
+\@writefile{toc}{\contentsline {subparagraph}{\nonumberline Compilation and installation of the gsl-library from source}{9}{section*.5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Execution}{9}{subsection.3.2}}
 \gdef \LT@ii {\LT@entry 
-    {1}{83.9755pt}\LT@entry 
+    {1}{77.55484pt}\LT@entry 
     {1}{85.97733pt}\LT@entry 
     {1}{248.15796pt}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces A summary of the parameters of the MCMC program.}}{13}{table.2}}
-\newlabel{tbl:tableParameterDescription}{{2}{13}{A summary of the parameters of the MCMC program}{table.2}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}MCMC output}{14}{section.4}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces A summary of the parameters of the MCMC program.\relax }}{10}{table.2}}
+\newlabel{tbl:tableParameterDescription}{{2}{10}{A summary of the parameters of the MCMC program.\relax }{table.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}MCMC output}{11}{section.4}}
 \citation{BooMK14}
 \citation{BooMK14}
 \citation{BooMK14}
 \gdef \LT@iii {\LT@entry 
     {1}{83.45618pt}\LT@entry 
     {1}{330.67078pt}}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces A summary of the output of the MCMC program.}}{15}{table.3}}
-\newlabel{tbl:tableOutputDescription}{{3}{15}{A summary of the output of the MCMC program}{table.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces A summary of the output of the MCMC program.\relax }}{12}{table.3}}
+\newlabel{tbl:tableOutputDescription}{{3}{12}{A summary of the output of the MCMC program.\relax }{table.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Combining Files}{16}{subsection.4.1}}
 \gdef \LT@iv {\LT@entry 
     {1}{113.97511pt}\LT@entry 
     {1}{68.9055pt}\LT@entry 
     {1}{259.53888pt}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Combining Files}{19}{subsection.4.1}}
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces A summary of the 'combine files scripts'.}}{19}{table.4}}
-\newlabel{tbl:tableCombineScripts}{{4}{19}{A summary of the 'combine files scripts'}{table.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces A summary of the 'combine files scripts'.\relax }}{17}{table.4}}
+\newlabel{tbl:tableCombineScripts}{{4}{17}{A summary of the 'combine files scripts'.\relax }{table.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Concatenating Files}{18}{subsection.4.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Illustration of how to set the command line arguments for the combine scripts. \relax }}{18}{figure.caption.7}}
+\newlabel{fig:MCMCOutputName}{{3}{18}{Illustration of how to set the command line arguments for the combine scripts. \relax }{figure.caption.7}{}}
 \gdef \LT@v {\LT@entry 
-    {1}{92.7303pt}\LT@entry 
+    {1}{88.48134pt}\LT@entry 
     {1}{68.9055pt}\LT@entry 
     {1}{259.53888pt}}
 \gdef \LT@vi {\LT@entry 
     {1}{92.14156pt}\LT@entry 
     {1}{83.13188pt}\LT@entry 
     {1}{245.3125pt}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Illustration of how to set the command line arguments for the combine scripts. \relax }}{22}{figure.caption.16}}
-\newlabel{fig:MCMCOutputName}{{3}{22}{Illustration of how to set the command line arguments for the combine scripts. \relax }{figure.caption.16}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Concatenating Files}{22}{subsection.4.2}}
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces A summary of the 'combine files scripts'.}}{22}{table.5}}
-\newlabel{tbl:tableConcatenateScripts}{{5}{22}{A summary of the 'combine files scripts'}{table.5}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces A summary of the options of the \texttt  {empiricIST\char `_MCMC\char `_Statistics.py} program.}}{22}{table.6}}
-\newlabel{tbl:tablePythonStatisticsOptions}{{6}{22}{A summary of the options of the \texttt {empiricIST\char `_MCMC\char `_Statistics.py} program}{table.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces A summary of the 'combine files scripts'.\relax }}{19}{table.5}}
+\newlabel{tbl:tableConcatenateScripts}{{5}{19}{A summary of the 'combine files scripts'.\relax }{table.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces A summary of the options of the \texttt  {empiricIST\char `_MCMC\char `_Statistics.py} program.\relax }}{19}{table.6}}
+\newlabel{tbl:tablePythonStatisticsOptions}{{6}{19}{A summary of the options of the \texttt {empiricIST\char `_MCMC\char `_Statistics.py} program.\relax }{table.6}{}}
 \gdef \LT@vii {\LT@entry 
     {1}{92.14156pt}\LT@entry 
     {1}{83.13188pt}\LT@entry 
     {1}{245.3125pt}}
 \citation{RamSX14}
 \citation{BeiRW07}
-\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces A summary of the options of the \texttt  {empiricIST\char `_MCMC\char `_DiagSummary.py} program.}}{23}{table.7}}
-\newlabel{tbl:tablePythonDiagOptions}{{7}{23}{A summary of the options of the \texttt {empiricIST\char `_MCMC\char `_DiagSummary.py} program}{table.7}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Visualization of trace data}{23}{subsection.4.3}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}DFE tail shape estimation}{24}{section.5}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces A summary of the options of the \texttt  {empiricIST\char `_MCMC\char `_DiagSummary.py} program.\relax }}{20}{table.7}}
+\newlabel{tbl:tablePythonDiagOptions}{{7}{20}{A summary of the options of the \texttt {empiricIST\char `_MCMC\char `_DiagSummary.py} program.\relax }{table.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Visualization of trace data}{20}{subsection.4.3}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}DFE tail shape estimation}{20}{section.5}}
 \citation{BeiRW07}
 \gdef \LT@viii {\LT@entry 
     {1}{92.14156pt}\LT@entry 
     {1}{83.13188pt}\LT@entry 
     {1}{245.3125pt}}
-\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces A summary of the options of the \texttt  {empiricIST\char `_MCMC\char `_TailShape.py} program.}}{25}{table.8}}
-\newlabel{tbl:tablePythonTailShapeOptions}{{8}{25}{A summary of the options of the \texttt {empiricIST\char `_MCMC\char `_TailShape.py} program}{table.8}{}}
 \citation{BeiRW07}
 \citation{CasS15}
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces A summary of the options of the \texttt  {empiricIST\char `_MCMC\char `_TailShape.py} program.\relax }}{22}{table.8}}
+\newlabel{tbl:tablePythonTailShapeOptions}{{8}{22}{A summary of the options of the \texttt {empiricIST\char `_MCMC\char `_TailShape.py} program.\relax }{table.8}{}}
 \bibdata{/Users/matu/Documents/Literature/Literature.bib}
 \bibcite{BanHW14}{{1}{2014}{{Bank et~al.}}{{Bank, Hietpas, Wong, Bolon, and Jensen}}}
-\bibcite{BooMK14}{{2}{2014}{{Boone et~al.}}{{Boone, Merrick, and Krachey}}}
-\bibcite{MatJB15}{{3}{in prep}{{Matuszewski et~al.}}{{Matuszewski, Jensen, and Bank}}}
+\bibcite{BeiRW07}{{2}{2007}{{Beisel et~al.}}{{Beisel, Rokyta, Wichman, and Joyce}}}
+\bibcite{BooMK14}{{3}{2014}{{Boone et~al.}}{{Boone, Merrick, and Krachey}}}
+\bibcite{CasS15}{{4}{2015}{{del Castillo and Serra}}{{}}}
+\bibcite{RamSX14}{{5}{2014}{{Rambaut et~al.}}{{Rambaut, Suchard, Xie, and Drummond}}}
+\global\@namedef{scr@dte@section@lastmaxnumwidth}{12.14694pt}
+\global\@namedef{scr@dte@subsection@lastmaxnumwidth}{19.70898pt}

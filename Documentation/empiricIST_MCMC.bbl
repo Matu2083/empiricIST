@@ -1,4 +1,4 @@
-\begin{thebibliography}{3}
+\begin{thebibliography}{5}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\urlprefix}{URL }
@@ -10,14 +10,24 @@ Bank, C., R.~T. Hietpas, A.~Wong, D.~N. Bolon, and J.~D. Jensen, 2014.
   in challenging environments.
 \newblock Genetics 196:841--852.
 
+\bibitem[{Beisel et~al.(2007)Beisel, Rokyta, Wichman, and Joyce}]{BeiRW07}
+Beisel, C.~J., D.~R. Rokyta, H.~A. Wichman, and P.~Joyce, 2007.
+\newblock Testing the extreme value domain of attraction for distributions of
+  beneficial fitness effects.
+\newblock Genetics 176:2441--2449.
+
 \bibitem[{Boone et~al.(2014)Boone, Merrick, and Krachey}]{BooMK14}
 Boone, E.~L., J.~R. Merrick, and M.~J. Krachey, 2014.
 \newblock A hellinger distance approach to mcmc diagnostics.
 \newblock Journal of Statistical Computation and Simulation 84:833--849.
 
-\bibitem[{Matuszewski et~al.(in prep)Matuszewski, Jensen, and Bank}]{MatJB15}
-Matuszewski, S., J.~D. Jensen, and C.~Bank, in prep.
-\newblock empiricist: An integrated software and analysis tool for analyzing
-  time-sampled sequence data such as empiric .
+\bibitem[{del Castillo and Serra(2015)}]{CasS15}
+del Castillo, J. and I.~Serra, 2015.
+\newblock Likelihood inference for generalized pareto distribution.
+\newblock Computational Statistics And Data Analysis 83:116 -- 128.
+
+\bibitem[{Rambaut et~al.(2014)Rambaut, Suchard, Xie, and Drummond}]{RamSX14}
+Rambaut, A., M.~Suchard, D.~Xie, and A.~Drummond, 2014.
+\newblock Tracer v1.6.
 
 \end{thebibliography}

@@ -100,8 +100,7 @@
  \titlehead{empiricIST: An Integrated Software and analysis Tool for analyzing time-sampled sequence data such as EMPIRIC}
   \subject{README}
   \title{empiricIST: An Integrated Software and analysis Tool for analyzing time-sampled sequence data such as EMPIRIC}
-  \author{Sebastian Matuszewski, Jeffrey D. Jensen and Claudia Bank}
-  \date{Lausanne, \today}
+  \author{In\^{e}s Fragata, Sebastian Matuszewski, Jeffrey D. Jensen and\\ Claudia Bank}
 \begingroup
  \makeatletter
  \@titlepagetrue
@@ -114,14 +113,14 @@
 \section{Introduction}
 
 
-This program serves as an extension of the Bayesian Monte Carlo Markov chain (MCMC) method described in \cite{BanHW14} for estimating selection coefficients (growth rates) from engineered-mutation-driven experimental evolution data. These data are based on methods -- such as EMPIRIC -- in which specific mutations are introduced and compared against each other and the wildtype. All mutants (and the wildtype) are assumed to have evolved together in bulk culture for a number of generations with samples taken throughout the course of the experiment. Growth rates -- and thus the selection coefficient of each mutation -- can then be estimated from the number of reads obtained from deep sequencing.
-The motivation for the \emph{empiricIST} software package is to provide an integrative framework for the analysis of experimental evolution data, and includes separate programs for processing raw sequence data and correcting for sequencing errors, obtaining statistically meaningful estimates of selection coefficients in a fast and efficient manner, and for providing ready-to-use summary statistics of the MCMC analysis and its associated parameter estimates.
-It is highly advisable to read the two accompanying papers by \cite{BanHW14} and \cite{MatJB15} that describe the methods and underlying assumptions in more detail before using the software.
+This program serves as an extension of the Bayesian Monte Carlo Markov chain (MCMC) method described in \cite{BanHW14} for estimating selection coefficients (growth rates) from engineered-mutation-driven experimental evolution data. These data are based on methods -- such as EMPIRIC -- in which specific mutations are engineered, introduced and compared against each other and a reference (e.g., wild-type) sequence. All mutants (and the wild-type) are assumed to have evolved together but independently in bulk competition over a number of generations with samples taken throughout the course of the experiment. Growth rate estimates are obtained from the number of reads obtained from deep sequencing.
+The motivation for the \emph{empiricIST} software package is to provide an integrative software tool for the analysis of deep-mutational scanning data, and includes separate programs for processing raw sequence data, growth rate estimation, post-processing and analyses of growth rate estimates.
+Before using the software, please read the two accompanying papers by \cite{BanHW14} and \cite{FraMJ17} that describe the methods and their underlying assumptions in more detail.
 
 \section{Input data}
 
-The \texttt{empiricIST\char`_MCMC} program only takes files in csv-format (comma-separated values) as input, which, furthermore, need to match a specified format (e.g., line endings need to be UNIX specific; input data needs to be ordered in a specified way). However, as part of the \emph{empiricIST} software package, we provide a python script -- \texttt{empiricIST\char`_MCMC\char`_Input.py} -- that adjusts the raw data to match the specific input format needed for the MCMC simulation program (including other options discussed in more detail below). A minimal example of the raw data that is required to generate the \texttt{empiricIST\char`_MCMC} input file is depicted in Figure~\ref{fig:RawInput}. Note that the raw data itself also needs to be csv-formatted with column entries separated by a comma (','), a semi-colon (';') or a tab ('\\t').
-Furthermore, the raw data file needs to have (exactly) one column either called 'sequence', 'Sequence', 'seq' or 'Seq' with at least two rows (the wild-type reference and a mutant) and at least additional 3 columns (i.e., time points) corresponding to the number of sequencing reads, with respectively named header cells.
+\texttt{empiricIST\char`_MCMC} input data is expected to be in csv-format (i.e., comma-separated values) following a specific ordering and UNIX line endings. As part of the \emph{empiricIST} software package, however, we provide a python\linebreak script -- \texttt{empiricIST\char`_MCMC\char`_Input.py} -- that adjusts the raw data to match the specific input format needed. A minimal example of the raw data that is required to generate the \texttt{empiricIST\char`_MCMC} input file is shown in Figure~\ref{fig:RawInput}. Note that the raw data itself also needs to be csv-formatted with column entries separated by a comma (','), a semi-colon (';') or a tab ('\textbackslash t').
+Furthermore, the raw data file needs to have (exactly) one column either called 'sequence', 'Sequence', 'seq' or 'Seq' with at least two rows (the wild-type reference in the first row and a mutant) and at least additional 3 columns corresponding to the number of sequencing reads per sampled time point (and header cells giving the time of sampling).
 
 \begin{figure}
 \centering \includegraphics[width=0.65\textwidth]{RawDataInput.png}
@@ -130,14 +129,14 @@ Furthermore, the raw data file needs to have (exactly) one column either called 
 
 \subsection{\texttt{empiricIST\char`_MCMC\char`_Input}.py}
 
-The program \texttt{empiricIST\char`_MCMC\char`_Input.py} is written in Python (2.7) and serves as a link between the (raw) time-sampled sequence data (e.g., obtained from EMPIRIC) and the \texttt{empiricIST\char`_MCMC} simulation program for the estimation of mutant growth rates 'r'. While it primarily ensures that the input data matches the input format required by the MCMC simulation program, it comes with additional options that will be detailed here.
+The program \texttt{empiricIST\char`_MCMC\char`_Input.py} is written in Python (2.7) and serves as a link between the (raw) time-sampled sequence data (e.g., obtained from a deep-mutational scanning experiment) and the \texttt{empiricIST\char`_MCMC} simulation program for the estimation of mutant growth rates 'r'. While it primarily ensures that the input data matches the input format required by the MCMC simulation program, it comes with additional options that will be detailed here.
 
 The general usage is as follows: After opening a command-line interface (e.g., Shell, Terminal) and navigating to the location of the \texttt{empiricIST\char`_MCMC\char`_Input.py} file, the program can be executed by typing
 \begin{lstlisting}
 python empiricIST_MCMC_Input.py [options] .
 \end{lstlisting}
 
-Note that this requires that the 'PATHVARIABLE' for Python has been set correctly on your system. Please consult the online Python documentation for further details (https://docs.python.org/2/). Without specifying any options the program will exit with an error and provide a short documentation on its usage, as it requires the name of a (raw) data input file and the start of the sequencing read data table to be specified (by invoking the '-f' and '-s' option, respectively). All options and their usage are given in Table~\ref{tbl:tablePythonOptions}.
+Note that this requires that the 'PATHVARIABLE' for Python has been set correctly on your system. Please consult the online Python documentation for further details (https://docs.python.org/2/). Without specifying any options the program will exit with an error and provide a short documentation on its usage. To execute the program, the name of the (raw) data input file and the start of the sequencing read data needs to be specified (by invoking the '-f' and '-s' option, respectively). All options and their usage are given in Table~\ref{tbl:tablePythonOptions}.
 
 {
 \centering
@@ -172,7 +171,7 @@ The '-s'-option is a mandatory option, which takes an integer value correspondin
 \hangafter=1
 \noindent
 When the '-o'-option is invoked, the python program will perform an outlier analysis. If '-o detect' (or equivalently '--outlier=detect'), the python program performs a log-linear regression analysis for all mutants. Data points are then classified as outliers on the basis of the DFBeta statistic with a cut-off value of 2 (with data points surpassing this cut-off regarded as outliers). For more details please consult \cite{BanHW14}.
-If '-o impute' (or equivalently '--outlier=impute'), the python program performs a log-linear regression analysis for all mutants. Data points are then classified as outliers on the basis of the DFBeta statistic with a cut-off value of 2 and their studentized residuals with a cut-off value of 3 (with data points surpassing \emph{both} cut-offs are regarded as outliers) and imputed as described in \cite{MatJB15}. Furthermore, an additional output file -- whose name consists of 'ImputedData' along with the input file name -- is produced that lists all imputed data points. In particular, the output is a simple matrix where rows denote different mutants and columns correspond to the different time points. An entry of  '1' indicates that the data has \emph{not} been imputed; an entry of '0' indicates that the data point has been imputed.
+If '-o impute' (or equivalently '--outlier=impute'), the python program performs a log-linear regression analysis for all mutants. Data points are then classified as outliers on the basis of the DFBeta statistic with a cut-off value of 2 and their studentized residuals with a cut-off value of 3 (with data points surpassing \emph{both} cut-offs are regarded as outliers) and imputed as described in \cite{FraMJ17}. Furthermore, an additional output file -- whose name consists of 'ImputedData' along with the input file name -- is produced that lists all imputed data points. In particular, the output is a simple matrix where rows denote different mutants and columns correspond to the different time points. An entry of  '1' indicates that the data has \emph{not} been imputed; an entry of '0' indicates that the data point has been imputed.
 \\
 \mc{1}{l}{-l, --leadseq=} & integer &
 \hangindent=1em
@@ -202,14 +201,13 @@ When the '-e'-option is invoked, time points are taken to be in hours instead of
 \hangindent=1em
 \hangafter=1
 \noindent
-When the '-g'-option is invoked, the data is grouped into subsets of mutants each of minimal size 'integer'. This results in more data sets with less mutants, such that the per-data set computation time is reduced, without affecting parameter estimates or the shape of the log-likelihood surface (compared to analysis of the full data set). The program also ensures, that mutants with identical mutant or protein ID (i.e., mutants that have an identical DNA- or amino acid sequence) remain in the same data sub-set as they are assumed to evolve under an identical growth rate (r). In general, the last line of the resulting input file serves as a summary line (indicated by a '-1' as mutant/protein ID and by 'XXX' in the sequence column) that gives the number of all sequencing reads not in the current sub-set (but which are still needed to be accounted for). 
-Estimates for the growth rates and the selection coefficients for the summary line are not calculated (but simply equated to those of the reference strain), since MCMC simulation estimates for this 'summary mutant' will later be discarded. The name of the output file (i.e., the MCMC input file) is composed of the standard output file identifier 'MCMCInput', the grouping identifier (a consecutive number of the sub data sets created) and the name of the input file. 
+When the '-g'-option is invoked, the data is grouped into subsets of mutants each of minimal size 'integer'. This results in more data sets with less mutants, such that the per-data set computation time is reduced, without affecting parameter estimates or the shape of the log-likelihood surface (compared to analysis of the full data set). The program also ensures, that mutants with identical mutant or protein ID (i.e., mutants that have an identical DNA- or amino acid sequence) remain in the same data sub-set as they are assumed to evolve under an identical growth rate (r). The name of the output file (i.e., the MCMC input file) is composed of the standard output file identifier 'MCMCInput', the grouping identifier (a consecutive number of the sub data sets created) and the name of the input file. 
 \\
 \mc{1}{l}{-i, --initialize} & none &
 \hangindent=1em
 \hangafter=1
 \noindent
-When the '-i'-option is invoked, and additional input file is created that specifies the initial growth rates (r) and initial population sizes (c) for all mutants based on he log-linear regression. Note that this could potentially bias the MCMC algorithm, since the initial starting point of the Markov chain could be trapped in a local log-likelihood optimum. Often, however, the median of the growth rates and the initial population sizes from the MCMC-DFE simulations are close enough to the corresponding estimates from the log-linear regression such that starting at these values could shorten the burn-in period and, thus, reduce the run time. For mutants with identical DNA or amino acid sequence, the mean initial population size is calculated (from these mutants) and taken as the starting value for the MCMC simulation program. Given the estimated mean initial population size, the growth rate is estimated from the log-linear regression.
+When the '-i'-option is invoked, and additional input file is created that specifies the initial growth rates (r) and initial population sizes (c) for all mutants based on the log-linear regression. Note that this could potentially bias the MCMC algorithm, since the initial starting point of the Markov chain could be trapped in a local log-likelihood optimum. Often, however, the median of the growth rates and the initial population sizes from the MCMC-DFE simulations are close enough to the corresponding estimates from the log-linear regression such that starting at these values could shorten the burn-in period and, thus, reduce the run time. For mutants with identical DNA or amino acid sequence, the mean initial population size is calculated (from these mutants) and taken as the starting value for the MCMC simulation program. Given the estimated mean initial population size, the growth rate is estimated from the log-linear regression.
 The name of the output file is composed of the standard output file identifier 'MCMCInput', an optional grouping identifier (see '-g'-option), the name of the input file, and an initialization file identifier '\texttt{\char`_inputRC}'. 
 \\
 \end{tabularx}
@@ -220,7 +218,7 @@ An illustration of the output file produced by the python program (i.e., the inp
 
 \begin{figure}
 \centering \includegraphics[width=0.95\textwidth]{MCMC-InputExample.png}
-\caption{Schematic illustration of the output produced by the python program and which serves as input for the MCMC simulation program. This input data has been created using the minimal raw data shown in Fig.~\ref{fig:RawInput}, where the first five bases and the last base have been discarded (barcodes; '-l' and '-t' option). DNA sequences ('seq' column) have been translated to amino acids ('aa' column) and pooled ('-p' option), such that identical amino acid sequences have the same protein ID ('protID' column). Estimates of the growth rates 'r' ('r' column) and the selection coefficient 's' ('s' column) along with the $95\%$-confidence intervals are based on the log-linear regression (where 'rCIL' and 'rCIU' give the lower and upper boundary of the confidence interval for the growth rate r, respectively. Notation is analogous for the selection coefficient 's'.). Please note, that while the MCMC simulation program assumes that mutants with identical sequence information (i.e., for sequences with identical 'protID') evolve at the same growth rate, log-linear estimates for 'r' and 's' are based on individual mutants.
+\caption{Schematic illustration of the output produced by the python program (which serves as input for the MCMC simulation program). This input data has been created using the minimal raw data shown in Fig.~\ref{fig:RawInput}, where the first five bases and the last base have been discarded (barcodes; '-l' and '-t' option). DNA sequences ('seq' column) have been translated to amino acids ('aa' column) and pooled ('-p' option), such that identical amino acid sequences have the same protein ID ('protID' column). Estimates of the growth rates 'r' ('r' column) and the selection coefficient 's' ('s' column) along with the $95\%$-confidence intervals are based on the log-linear regression (where 'rCIL' and 'rCIU' give the lower and upper boundary of the confidence interval for the growth rate r, respectively. Notation is analogous for the selection coefficient 's'.). Please note, that while the MCMC simulation program assumes that mutants with identical sequence information (i.e., for sequences with identical 'protID') evolve at the same growth rate, log-linear estimates for 'r' and 's' are based on individual mutants.
 The columns '4.8', '7.2', '9.6', '12', '16.8', and '26.4' give the number of sequencing reads obtained from sampling at these time points for each mutant (row). If the '-o detect'-option is invoked, the matrix of sequencing reads is followed by an outlier matrix for the corresponding time points and mutants, where '0' indicate data points that where classified as outliers.\label{fig:PythonOutput}}
 \end{figure}
 
@@ -228,41 +226,39 @@ Depending on the invoked options, the name of the MCMC simulation input file tha
 
 \section{Usage} 
  
-We provide executables for (Mac OS X), Windows and Linux. The C++ source code along with a system specific makefile are provided under a GNU General Public License as published by the Free Software Foundation. If you do not need to compile the program yourself you can skip the next subsection.
+We provide executables for Mac OS X, Windows and Linux. The C++ source code along with a system specific makefile are provided under a GNU General Public License as published by the Free Software Foundation. If you do not need to compile the program yourself you can skip the next subsection.
  
 \subsection{Compilation} 
 
-Note that compilation requires that the (Gnu Scientific Library) (gsl-library) is installed on your system. Information on how to install the gsl-library can be found under \url{http://www.gnu.org/software/gsl/}.
+Note that compilation requires that the Gnu Scientific Library (gsl-library) is installed on your system. Information on how to install the gsl-library can be found under \url{http://www.gnu.org/software/gsl/}.
 On Windows the easiest way to obtain the gsl-library is to install Cygwin (\url{http://www.cygwin.com/}) including the developers (all) packages. Alternatively, MinGW (\url{http://www.mingw.org/}) provides a ''minimalist GNU for Windows'' development environment. Under MinGW though, the gsl-library needs to be installed independently. A short instruction is given in the following paragraph.
 
-Compilation of the program has successfully been tested on MacOSX (10.9.5) using 'clang' (version 6.0) and 'gcc' (version 4.9), on Ubuntu (14.04 LTS) using 'g++' (version 4.8.2), and on Windows (8.1) using 'g++' (version 4.8.1 under MinGW; version 4.9.2 under Cygwin).
+Compilation of the program has successfully been tested on MacOSX (10.12.6) using 'clang' (version 6.0) and 'gcc' (version 4.9), on Ubuntu (14.04 LTS) using 'g++' (version 4.8.2), and on Windows (8.1) using 'g++' (version 4.8.1 under MinGW; version 4.9.2 under Cygwin).
 
 \subsubsection*{Windows}
 
-\paragraph*{Cygwin}
-Please note that Cygwin is a large collection of GNU and open source tools, which provide functionality similar to a Linux distribution on Windows. Thus, when using Cygwin, commands and folder navigation are different to those from a native Windows Shell (e.g., Powershell).
+Compilation of the program under Windows either requires Cygwin -- i.e., a large collection of GNU and open source tools, which provide functionality similar to a Linux distribution on Windows -- or MinGW -- a complete open source programming tool set for the development of native Windows applications including both different compilers and a ``minimal system'' bourne shell command line interpreter system MSYS. 
+
+The easiest way to compile the program is by using the provided makefile. For that simply type 
+\begin{lstlisting}
+make
+\end{lstlisting}
+after having navigated to the folder where the source code is stored.
+
+Please note that when using Cygwin commands and folder navigation are different to those from a native Windows Sehll (e.g., Powershell)
 For example, under Cygwin you first need to type 
 \begin{lstlisting}
 cd /cygdrive/c
 \end{lstlisting}
-to navigate to the drive 'C:\textbackslash'.
+to navigate to the drive 'C:\textbackslash'. Furthermore, note that Cygwin does not allow to link libraries statically.
 
-The easiest way to compile the program is by using the provided makefile. After navigating to the folder where the source code is stored, simply type
+When using MinGW/MSYS please check before compilation whether the gsl-library is installed. If not, a rough manual on how this can be done is given below. When already installed, the easiest way to compile the program is again to use the provided makefile. For that simply type
 \begin{lstlisting}
-make -f Makefile_MCMC_Cygwin .
+make
 \end{lstlisting}
-Please note that you might want to adjust the makefile, in particular, to change the name of the executable which is by default set to '\texttt{empiricIST\char`_MCMC\char`_Cygwin.exe}'.
-
-Alternatively, you can manually compile the program from source by navigating to the folder where the source code is stored and by typing
-\begin{lstlisting}
-g++ empiricIST_MCMC.cpp -lgsl -lgslcblas -O3 -o 'NameOfProgram' ,
+after having navigated to the folder where the source code is stored. Note that to navigate to the drive 'C:\textbackslash' under MSYS one first has to type \begin{lstlisting}
+cd /c .
 \end{lstlisting}
-where 'NameOfProgram' should be replaced by the actual name of the compiled program (e.g., \texttt{empiricIST\char`_MCMC}). 
-
-Note that Cygwin does not allow to link libraries statically.
-
-\paragraph*{MinGW}
-Please note that MinGW provides a complete open source programming tool set for the development of native Windows applications (including both different compilers and a ``minimal system'' bourne shell command line interpreter system MSYS).
 
 \subparagraph{Compilation and installation of the gsl-library from source}
 Before compilation and installation of the gsl-library please read and follow the installation instructions provided with the most recent version of gsl.
@@ -283,123 +279,21 @@ make install
 \item GSL binaries, headers and library files are installed automatically in the 'bin/', 'include/gsl/', and 'lib/' subdirectories (if not specified otherwise; in that case you would also need to adjust the linker and compiler flags in the makefile).
 \end{enumerate}
 
-\subparagraph{Compilation of the MCMC}
+\subsubsection*{Linux and MacOS X}
 
-Open a MSYS shell and type
+The easiest way to compile the program is by using the provided makefile. For that simply use the shell and type
 \begin{lstlisting}
-cd /c
+make
 \end{lstlisting}
-to navigate to the drive 'C:\textbackslash'.
+after having navigated to the folder where the source code is stored.
+Please note that you might want to adjust the makefile, in particular, to change the name of the executable which is by default set to '\texttt{\emph{empiricIST}\char`_MCMC.out}'.
 
-The easiest way to compile the program is by using the provided makefile. After navigating to the folder where the source code is stored simply type
-\begin{lstlisting}
-make -f Makefile_empiricIST_MCMC_WINDOWS .
-\end{lstlisting}
-Please note that you might want to adjust the makefile, in particular, to change the name of the executable which is by default set to '\texttt{empiricIST\char`_MCMC.exe}'.
-
-Alternatively, you can manually compile the program from source by navigating to the folder where the source code is stored and by typing
-\begin{lstlisting}
-g++ empiricIST_MCMC.cpp -lgsl -lgslcblas -O3 -o 'NameOfProgram' ,
-\end{lstlisting}
-where 'NameOfProgram' should be replaced by the actual name of the compiled program (e.g., \texttt{empiricIST\char`_MCMC}). 
-
-
-\subsubsection*{Linux}
-
-The easiest way to compile the program is by using the provided makefile.
-Use the Shell to navigate to the folder where the source code is stored and simply type 
-\begin{lstlisting}
-make -f empiricIST_MCMC_Linux .
-\end{lstlisting}
-Please note that you might want to adjust the makefile, in particular, to change the name of the executable which is by default set to '\texttt{\emph{empiricIST}\char`_MCMC}'.
-
-Alternatively, you can manually compile the program from source by navigating to the folder where the source code is stored and by typing
-\begin{lstlisting}
-g++ empiricIST_MCMC.cpp -lgsl -lgslcblas -O3 -o 'NameOfProgram' ,
-\end{lstlisting}
-where 'NameOfProgram' should be replaced by the actual name of the compiled program (e.g., \texttt{empiricIST\char`_MCMC}). 
-
-\subsubsection*{Mac OS X}
-
-The easiest way to compile the program is by using the provided makefile.
-Use the Terminal to navigate to the folder where the source code is stored and simply type 
-\begin{lstlisting}
-make -f empiricIST_MCMC_MacOSX .
-\end{lstlisting}
-Please note that you might want to adjust the makefile, in particular, to change the name of the executable which is by default set to '\texttt{empiricIST\char`_MCMC}'.
-
-Alternatively, you can manually compile the program from source by navigating to the folder where the source code is stored and by typing
-\begin{lstlisting}
-g++ empiricIST_MCMC.cpp -lgsl -lgslcblas -O3 -o 'NameOfProgram' ,
-\end{lstlisting}
-where 'NameOfProgram' should be replaced by the actual name of the compiled program (e.g., \texttt{empiricIST\char`_MCMC}). 
- 
 \subsection{Execution}
  
-Note that the \texttt{\emph{empiricIST}\char`_MCMC} program is a command line program which is run from a command-line interface (e.g., Shell, Terminal, Powershell), with arguments and parameters being passed over the command line. An overview and description of the parameters can be found in Table~\ref{tbl:tableParameterDescription}.
-Depending on your operating system there are different ways to call the program. These will be explained in the subsequent paragraphs.
+Note that the \texttt{\emph{empiricIST}\char`_MCMC} program is a command line program which is run from a command-line interface (e.g., Shell, Terminal, Powershell), with arguments and parameters being passed over the command line. To ease execution of the program we provide OS specific scripts, where parameters and options can be specified by the user. An overview and description of the parameters and options can be found in Table~\ref{tbl:tableParameterDescription}. Examples on how to manually execute the program are given when running the program without any parameters.
  
-\subsubsection*{Windows}
- 
-\paragraph{Cygwin}
+Under Windows there are two different scripts for running the program, depending on whether the program is run under Cygwin or using Powershell. Note that when using Cygwin, the source code needs to be compiled first (since Cygwin does not allow to compile statically) and 'PathToDataFile' needs to be preceded by '/cygdrive/c/' (assuming that the datafile is stored on the 'c' drive).
 
-There are two ways to execute the program. First, the easiest way is to use the provided bash script '\texttt{empiricIST\char`_MCMC\char`_Cygwin.sh}', where the parameters (e.g., 'PathToDataFile', skipCol, burnin) can be specified by the user.
-To begin, navigate to the folder where the executable and the bash script are stored and type
-\begin{lstlisting}
-./empiricIST_MCMC_Cygwin.sh .
-\end{lstlisting}
-
-Second, you can manually execute the program by using Cygwin to navigate to the folder where the executable is stored and typing
- \begin{lstlisting}[breaklines=true] 
-./'NameOfProgram' 'PathToDatafile' outfileName skipCol outliersPresent burnin subsampling noSets set proposalDistCScale proposalDistRSD initialRC printLogLTS printESS printOutput timeHours seed ,
-\end{lstlisting}  
-where the parameters (e.g., 'PathToDataFile', skipCol, burnin) need to be specified by the user. 
-
-Note that under Cygwin the 'PathToDataFile' needs to be preceded by '/cygdrive/c/' (if the datafile is stored on the 'c' drive).
-
-\paragraph{Powershell}
-
-There are two ways to execute the program. First, the easiest way is to use the provided powershell script '\texttt{empiricIST\char`_MCMC\char`_WINDOWS.ps1}', where the parameters (e.g., 'PathToDataFile', skipCol, burnin) can be specified by the user.
-To begin, open Powershell and navigate to the folder where the executable and the powershell script are stored and type
-\begin{lstlisting}
-& empiricIST_MCMC_WINDOWS.ps1 .
-\end{lstlisting}
-
-Second, you can manually execute the program by using Powershell to navigate to the folder where the executable is stored and typing
- \begin{lstlisting}[breaklines=true] 
-& 'NameOfProgram' 'PathToDatafile' outfileName skipCol outliersPresent burnin subsampling noSets set proposalDistCScale proposalDistRSD initialRC printLogLTS printESS printOutput timeHours seed ,
-\end{lstlisting}  
-where the parameters (e.g., 'PathToDataFile', skipCol, burnin) need to be specified by the user. 
-
-\subsubsection*{Linux}
-
-There are two ways to execute the program. First, the easiest way is to use the provided bash script '\texttt{\emph{empiricIST}\char`_MCMC\char`_Linux.sh}', where the parameters (e.g., 'PathToDataFile', skipCol, burnin) can be specified by the user.
-To begin, navigate to the folder where the executable and the bash script are store and type
-\begin{lstlisting}
-./empiricIST_MCMC_Linux.sh .
-\end{lstlisting}
-
-Second, you can manually execute the program by using the shell to navigate to the folder where the executable is stored and typing
- \begin{lstlisting}[breaklines=true] 
-./'NameOfProgram' 'PathToDatafile' outfileName skipCol outliersPresent burnin subsampling noSets set proposalDistCScale proposalDistRSD initialRC printLogLTS printESS printOutput timeHours seed ,
-\end{lstlisting}  
-where the parameters (e.g., 'PathToDataFile', skipCol, burnin) need to be specified by the user. 
-
-\subsubsection*{Mac OS X}
- 
-There are two ways to execute the program.  First, the easiest way is to use the provided bash script  '\texttt{\emph{empiricIST}\char`_MCMC\char`_MacOSX.sh}', where the parameters (e.g., 'PathToDataFile', skipCol, burnin) can be specified by the user.
-To begin, navigate to the folder where the executable and the bash script are store and type
-\begin{lstlisting}
-./empiricIST_MCMC_MacOSX.sh .
-\end{lstlisting} 
-
-Second, you can manually execute the program by using the terminal to navigate to the folder where the executable is stored and typing 
- \begin{lstlisting}[breaklines=true] 
-./'NameOfProgram' 'PathToDatafile' outfileName skipCol outliersPresent burnin subsampling noSets set proposalDistCScale proposalDistRSD initialRC printLogLTS printESS printOutput timeHours seed ,
-\end{lstlisting}  
-where the parameters (e.g., 'PathToDataFile', skipCol, burnin) need to be specified by the user. 
-
- 
 {
 \centering
 \begin{scriptsize}
@@ -412,57 +306,57 @@ where the parameters (e.g., 'PathToDataFile', skipCol, burnin) need to be specif
 \mc{1}{r}{\textbf{Parameter}} & & \\\hline
  &&\\
 \mc{1}{l}{Data} &  & \\\cline{1-1}
-\mc{1}{r}{datafile} & string &
+\mc{1}{r}{-file} & string &
 \hangindent=1em
 \hangafter=1
 \noindent
-Give the full path to the datafile \linebreak
+MANDATORY: Give the full path to the datafile \linebreak
 (e.g., /users/me/PathToData/reads.csv).
 \\
-\mc{1}{r}{outfileName} & string &
+\mc{1}{r}{-prefix} & string &
 \hangindent=1em
 \hangafter=1
 \noindent
-Name of the output file. The program will take the name of the input file and add the 'outfileName', the time of execution and the identifier (e.g., '\texttt{\char`_C}').
+The name of the output file prefix (default DFE). The program will take the name of the input file and add the 'prefix', the time of execution and the file identifier (e.g., '\texttt{\char`_C}').
 This produces for example \linebreak
-/PathToData/\texttt{\char`_'datafile'\char`_'outfileName'\char`_'date\&time'\char`_C.txt}. 
+/PathToData/\texttt{\char`_'file'\char`_'prefix'\char`_'timeStamp'\char`_C.txt}. 
 \\
-\mc{1}{r}{skipCol} & integer, $\$\geq$0 &
+\mc{1}{r}{-skipCol} & integer, $\$\geq$0 &
 \hangindent=1em
 \hangafter=1
 \noindent
-Number of columns to skip in data file before read numbers start.
+MANDATORY: Number of columns to skip in data file before read numbers start.
 \\
-\mc{1}{r}{outliersPresent} & bool &
+\mc{1}{r}{-outliers} &  &
 \hangindent=1em
 \hangafter=1
 \noindent
-If '0' there is no outlier matrix in the data file. If '1' there is an outlier matrix in the data file.
+Pass the -outlier option if there is an outlier matrix in the data file.
 \\
 \mc{1}{l}{MCMC} &  & \\\cline{1-1}
-\mc{1}{r}{burnin} & integer, $\$\geq0$ & 
+\mc{1}{r}{-burnin} & integer, $\$\geq0$ & 
 \hangindent=1em
 \hangafter=1
 \noindent
-Number of accepted values that are discarded (burn-in period). During the burn-in period the parameters of the proposal distribution are adjusted.
+Number of accepted values that are discarded (burn-in period). During the burn-in period the parameters of the proposal distribution are optimized. By default $100{,}000$ is used.
 \\
-\mc{1}{r}{subSampling} & integer, $\$\geq0$ & 
+\mc{1}{r}{-subsampling} & integer, $\$\geq0$ & 
 \hangindent=1em
 \hangafter=1
 \noindent
-After the burn-in period only every 'subSampling' accepted value is recorded (i.e., written to file).
+After the burn-in period only every 'subsampling' accepted value is recorded (i.e., written to file). By default $1{,}000$ is used.
 \\
-\mc{1}{r}{noSets} & integer, $\$\>0$ & 
+\mc{1}{r}{-noSets} & integer, $\$\>0$ & 
 \hangindent=1em
 \hangafter=1
 \noindent
-Number of output data sets that are recorded each of size size 'setSize'. The total chain length is given by 'burnin'$+$'noSets'$\times$'setSize'$\times$'subSampling'.
+Number of output data sets that are recorded each of size 'set'. By default $10$ is used.
 \\
-\mc{1}{r}{setSize} & integer, $\$\>0$ & 
+\mc{1}{r}{-set} & integer, $\$\>0$ & 
 \hangindent=1em
 \hangafter=1
 \noindent
-Number of recorded samples per set. The total chain length is given by 'burnin'$+$'noSets'$\times$'setSize'$\times$'subSampling'. Output to file is written every 'setSize' accepted and recorded samples.
+Number of recorded samples per set. By default $1{,}000$ is used.
 \\
 %\mc{1}{r}{terminateESS} & integer & 
 %\hangindent=1em
@@ -471,56 +365,57 @@ Number of recorded samples per set. The total chain length is given by 'burnin'$
 %An alternative stopping condition. If '-1',  the total chain length is given by 'burnin'$+$'noSets'$\times$'setSize'$\times$'subSampling'. \linebreak
 %If $\neq-1$, the MCMC stops when the minimal ESS for each sampled parameter has been reached. 
 %\\
-\mc{1}{r}{proposalDistCScale} & double, $\$>0$ & 
+\mc{1}{r}{-growthRateSD} & double, $\$>0$ & 
 \hangindent=1em
 \hangafter=1
 \noindent
-Scale parameter of the proposal distribution of initial population sizes 'c' (Cauchy distribution) .
+Standard deviation of the proposal distribution of growth rates 'r' drawn from a Gaussian distribution. By default $0.0004$ is used.
 \\
-\mc{1}{r}{proposalDistRSD} & double, $\$>0$ & 
+\mc{1}{r}{-popSizeSD} & double, $\$>0$ & 
 \hangindent=1em
 \hangafter=1
 \noindent
-Standard deviation of the proposal distribution of growth rates 'r' (Normal distribution) .
+Scale parameter of the proposal distribution of initial population sizes 'c' drawn from a Cauchy distribution. By default $0.0002$ is used.
 \\
-\mc{1}{r}{inititalRC} & string & 
+\mc{1}{r}{-initital} & string & 
 \hangindent=1em
 \hangafter=1
 \noindent
-An alternative way to initialize the growth rates 'r', the initial population sizes 'c' and to (optionally) set the parameters of the proposal distributions. This option allows, for example, to continue an MCMC run that has not been run long enough from the previous accepted sample. Note that for continuing an MCMC run the burn-in has to be set to 0. If 'initialRC' $= -1$, the default initialization is used (i.e., r=1 and initial population size = first observed read number for all mutants). When 'initialRC' $\neq -1$ the program will search for the initialization file
-\texttt{'datafile'\char`_'initialRC'}. In particular if the 'datafile' has been specified as '/users/me/PathToData/reads.csv' and the name of the initialization file is '\texttt{\char`_reads\char`_initialRC.txt}', the initialRC parameter passed to the program should be 'initialRC.txt'. Note that this file needs to be located in the same directory as the datafile and that the name initialization file should be of the form \texttt{XYZData\char`_'initialRC'}.
+Specify the file (including its path) to the initializing data.
+An alternative way to initialize the growth rates 'r', the initial population sizes 'c' and to (optionally) set the parameters of the proposal distributions of the MCMC. If not specified growth rates are by default all set to 1 and initial population sizes correspond to the first observed read count.
+This option can for example be used to continue an MCMC run that has not been run long enough from the previous accepted sample. Note that in this case though, the burn-in has to be set to 0. 
 \\
-\mc{1}{r}{timeHours} & bool & 
+\mc{1}{r}{-hours} &  & 
 \hangindent=1em
 \hangafter=1
 \noindent
-If '0', time points are assumed to be measured in generation time. If '1', each time point is assumed to be measured  hours.
+If the -hours option is passed time points are assumed to be measured in hours. By default time is assumed to be measured in generations.
 \\
 \mc{1}{l}{Output} &  & \\\cline{1-1}
-\mc{1}{r}{printLogLTS} & bool & 
+\mc{1}{r}{-logLTS} &  & 
 \hangindent=1em
 \hangafter=1
 \noindent
-If '0', no time series of log-likelihoods is written. If '1', a time series of log-likelihoods is written.
+If the -logLTS option is passed a time series of log-likelihoods is written to file.
 \\
-\mc{1}{r}{printESS} & bool & 
+\mc{1}{r}{-ESS} &  & 
 \hangindent=1em
 \hangafter=1
 \noindent
-If '0', no ESS statistics are written. If '1', ESS statistics are written. The effective sample size (ESS) is calculated every 1000 accepted samples.
+If the -ESS option is passed the effective sample size (ESS) is calculated every 1000 accepted samples and written to file.
 \\
-\mc{1}{r}{printOutput} & bool & 
+\mc{1}{r}{-screen} &  & 
 \hangindent=1em
 \hangafter=1
 \noindent
-If '0', no additional output will be written to screen. If '1', additional output will be written to screen. Mainly for inspection purposes.
+If the -screen option is passed additional output will be written to screen. This option is mainly for inspection purposes.
 \\
 \mc{1}{l}{Random numbers} &  & \\\cline{1-1}
-\mc{1}{r}{seed} & integer & 
+\mc{1}{r}{-seed} & integer, $\$>0$ & 
 \hangindent=1em
 \hangafter=1
 \noindent
-Sets the random number seed. If 'seed'$\leq0$ a random number seed is created automatically based on computer run time.
+Sets the random number seed. By default the random number seed is created automatically based on computer run time. This option is mainly for inspection purposes.
 \\
 \end{tabularx}
 \end{scriptsize}
@@ -528,8 +423,8 @@ Sets the random number seed. If 'seed'$\leq0$ a random number seed is created au
 
 \section{MCMC output}
 
-The program creates different kinds of output files that contain time-series data for different parameters, summary and diagnostic statistics for those parameters and for the entire MCMC run.
-Note that, even though all output files are plain 'txt'-files, they are all formatted as '.tsv'-files (tab separated) and can be displayed nicely with any spreadsheet application (e.g., Excel). Furthermore, all output files are structured such that they start with a list of the input/parameters for the MCMC run which are followed by the simulation results.
+By default, the MCMC program outputs the raw growth rate and initial population sizes samples, along with two separate files containing summary and diagnostic statistics. The same output can optionally be generated for the log-likelihood data.
+Each file starts with a list of the input/parameters. For all files, data is written in tab-separated format, such that it be displayed nicely and easily with any spreadsheet application (such as Excel or OpenOffice).
 
 {
 \clearpage
@@ -692,7 +587,7 @@ ESS for log-likelihood.
 \hangindent=1em
 \hangafter=1
 \noindent
-Overall acceptance ratio. To ensure high efficiency of the MCMC, the width of the proposal distributions should be chosen such that the acceptance ratio is between $0.15-0.45$. Performance is maximal with an acceptance ratio around $0.25$. During the burn-in period the width of the proposal distributions is automatically tuned -- based on the acceptance ratio -- such that the acceptance ratio, when recording samples, has close to maximal efficiency. Thus, a sufficiently long burn-in period not only increases the chance that recorded samples are actually taken from the posterior distribution, but also that the width of the proposal distribution is set appropriately.
+Overall acceptance ratio. To ensure high efficiency of the MCMC, the width of the proposal distributions should be chosen such that the acceptance ratio is between $0.15-0.45$. Performance is maximal when the acceptance ratio is around $0.25$. During the burn-in period the widths of the proposal distributions are automatically tuned to ensure that the acceptance is close to optimal, and efficiency is maximized during sampling. Thus, a sufficiently long burn-in period not only increases the chance that recorded samples are actually taken from the posterior distribution, but also that the width of the proposal distribution is set appropriately.
 \\
 &\\
 \mc{1}{l}{.*\_Diag\_R} &   \\\cline{1-1}
@@ -1038,17 +933,17 @@ The maximal auto-correlation time (ACT) that was observed for all parameters.
 \noindent
 The overall acceptance ratio of accepted (and recorded) samples. To ensure high efficiency of the MCMC, the width of the proposal distributions should be chosen such that the acceptance ratio is between $0.15-0.45$. Performance is maximal with an acceptance ratio around $0.25$. During the burn-in period the width of the proposal distributions is automatically tuned -- based on the acceptance ratio -- such that the acceptance ratio, when recording samples, has close to maximal efficiency. Thus, a sufficiently long burn-in period not only increases the chance that recorded samples are actually taken from the posterior distribution, but also that the width of the proposal distribution is set appropriately.
 \\
-\mc{1}{r}{jumpSDR} & 
+\mc{1}{r}{growthRateSD} & 
 \hangindent=1em
 \hangafter=1
 \noindent
-Standard deviation of the proposal distribution of growth rates 'r' (Normal distribution) after auto-tuning.
+Standard deviation of the proposal distribution of growth rates 'r' drawn from a Gaussian distribution after auto-tuning.
 \\
-\mc{1}{r}{jumpSDC} & 
+\mc{1}{r}{popSizeSD} & 
 \hangindent=1em
 \hangafter=1
 \noindent
-Scale parameter of the proposal distribution of initial population sizes 'c' (Cauchy distribution) after auto-tuning.
+Scale parameter of the proposal distribution of initial population sizes 'c' drawn from a Cauchy distribution after auto-tuning.
 \\
 &\\
 \mc{1}{l}{.*\_initialRC} &   \\\cline{1-1}
@@ -1065,13 +960,14 @@ This file prints the last accepted values of the MCMC run so that these could be
 
 \subsection{Combining Files}
 
-In case data has been split into multiple subsets to enhance computational performance (see '-g' option in Tab.~\ref{tbl:tablePythonOptions}), we provide scripts to assemble the individual MCMC output files for each sub-data set to a single file which contains all information necessary for further analysis. 
-Note that we only provide scripts to assemble 'diagnostic', 'quantiles' and 'posterior sample' files (i.e., files which contain the MCMC samples for the growth rate (r) and the initial population size (c)). The \texttt{Combine\char`_All.sh} script is a wrapper which executes all 'Combine' scripts (i.e., \texttt{Combine\char`_Diagnostic\char`_C.sh}, \texttt{Combine\char`_Diagnostic\char`_R.sh}, \texttt{Combine\char`_Quantiles\char`_C.sh}, \texttt{Combine\char`_Quantiles\char`_R.sh}, \texttt{Combine\char`_PopSizes\char`_C.sh} and \texttt{Combine\char`_GrowthRates\char`_R.sh}). It furthermore renames the \texttt{empiricIST\char`_MCMC} output files (by removing the time stamp) and deletes the files that will not be combined, if specified by the user. More information on all the script files is given in Table~\ref{tbl:tableCombineScripts}.
+In case the data set has been split into multiple subsets to enhance computational performance (see '-g' option in Tab.~\ref{tbl:tablePythonOptions}), we provide scripts to assemble the individual MCMC output files for each sub-data set into a single file (restricted to 'diagnostic', 'quantiles', and 'initial population size' and 'growth rate' files).
+\texttt{Combine\char`_All.sh} is a wrapper which executes all 'Combine' scripts (i.e., \texttt{Combine\char`_Diagnostic\char`_C.sh}, \texttt{Combine\char`_Diagnostic\char`_R.sh}, \texttt{Combine\char`_Quantiles\char`_C.sh}, \texttt{Combine\char`_Quantiles\char`_R.sh}, \texttt{Combine\char`_PopSizes\char`_C.sh} and \texttt{Combine\char`_GrowthRates\char`_R.sh}). It furthermore removes the time stamp from all \texttt{empiricIST\char`_MCMC} output files and (optionally) deletes the files that will not be combined. More information on all the script files is given in Table~\ref{tbl:tableCombineScripts}.
 
-Note that the bash scripts need to have the appropriate rights to perform the operations. In order to set the correct permissions, open a Shell and navigate to the folder where the scripts are stored and type
+Please ensure that the scripts have the appropriate file permissions to perform the operations. File permissions can be adjusted by using the command-line and typing
 \begin{lstlisting}[breaklines=true]
-chmod 755 Combine_*.sh .
+chmod 755 <file> .
 \end{lstlisting}
+\clearpage
 
 {
 \centering
@@ -1089,8 +985,8 @@ chmod 755 Combine_*.sh .
 \noindent
 
 
-This script renames all MCMC output files, executes all individual combine scripts, and deletes the files that will not be combined.
-To execute the script open a Shell and navigate to the folder where the scripts are stored and type
+This script removes the time stamp from all MCMC output files, executes all individual combine scripts, and (optionally) deletes the files that will not be combined.
+To execute the script type
 
 \vspace{0.05cm}
 ./\texttt{Combine\char`_All.sh} pathToPerlRename pathToData prefixFileName suffixFileName maxIndex deleteFiles .
@@ -1102,17 +998,19 @@ pathToPerlRename: Provide full path to 'rename.pl'.
 pathToData: Provide full path to data folder.
 \vspace{0.05cm}
 
-prefixFileName: Provide file name prefix. For an example see Figure~\ref{fig:MCMCOutputName}.
+prefixFileName: Provide file name prefix.
 \vspace{0.05cm}
 
-suffixFileName: Provide file name suffix. For an example see Figure~\ref{fig:MCMCOutputName}.
+suffixFileName: Provide file name suffix.
 \vspace{0.05cm}
 
-maxIndex: The number of sub-data sets the original data has been split-up to. For an example see Figure~\ref{fig:MCMCOutputName}.
+maxIndex: The number of sub-data sets the original data has been split-up to.
 \vspace{0.05cm}
 
-deleteFiles: When set to '1' files that will not be combined will be deleted.
+deleteFiles: When set to '1' files that will not be combined will be deleted. Set to 0 otherwise.
 \vspace{0.05cm}
+
+For an example see Figure~\ref{fig:MCMCOutputName}.
 
 Information on the individual combine scripts can be found below. 
 
@@ -1122,10 +1020,9 @@ Information on the individual combine scripts can be found below.
 \hangafter=1
 \noindent
 
-This script combines all MCMC ouput files of type '\texttt{Diagnostic\char`_C} of all sub-data sets to a single file. Note that the reference sequence and the 'summary mutants' (i.e., protID=-1)
-will be deleted, since they do not contain any relevant information.
+This script combines all MCMC ouput files of type '\texttt{Diagnostic\char`_C} of all sub-data sets into a single file. Note that the reference sequence will be deleted, since it does not contain any relevant information.
 
-To execute the script open a Shell and navigate to the folder where the scripts are stored and type
+To execute the script type
 
 \vspace{0.05cm}
 ./\texttt{Combine\char`_Diagnostic\char`_C.sh} pathToData prefixFileName suffixFileName maxIndex .
@@ -1135,13 +1032,13 @@ To execute the script open a Shell and navigate to the folder where the scripts 
 pathToData: Provide full path to data folder.
 
 \vspace{0.05cm}
-prefixFileName: Provide file name prefix. For an example see Figure~\ref{fig:MCMCOutputName}.
+prefixFileName: Provide file name prefix.
 
 \vspace{0.05cm}
-suffixFileName: Provide file name suffix. For an example see Figure~\ref{fig:MCMCOutputName}.
+suffixFileName: Provide file name suffix.
 
 \vspace{0.05cm}
-maxIndex: The number of sub-data sets the original data has been split-up to. For an example see Figure~\ref{fig:MCMCOutputName}.
+maxIndex: The number of sub-data sets the original data has been split-up to.
 
 \\
 
@@ -1150,8 +1047,7 @@ maxIndex: The number of sub-data sets the original data has been split-up to. Fo
 \hangafter=1
 \noindent
 
-As above, but for growth rates 'R'. Note that if estimates with identical estimates are only represented once. That is the case, for instance, when data has been analyzed on the level of amino acids (see '-p' option in Tab.~~\ref{tbl:tablePythonOptions}).
-
+As above, but for growth rates 'R'.
 \\
 
 \mc{1}{l}{\texttt{Combine\char`_Quantiles\char`_C.sh}} & 4  &
@@ -1159,10 +1055,9 @@ As above, but for growth rates 'R'. Note that if estimates with identical estima
 \hangafter=1
 \noindent
 
-This script combines all MCMC ouput files of type '\texttt{Quantiles\char`_C} of all sub-data sets to a single file. Note that the reference sequence and the 'summary mutants' (i.e., protID=-1)
-will be deleted, since they do not contain any relevant information.
+This script combines all MCMC ouput files of type '\texttt{Quantiles\char`_C} of all sub-data sets into a single file. Note that the reference sequence will be deleted, since it does not contain any relevant information.
 
-To execute the script open a Shell and navigate to the folder where the scripts are stored and type
+To execute the script type
 
 \vspace{0.05cm}
 ./\texttt{Combine\char`_Quantiles\char`_C.sh} pathToData prefixFileName suffixFileName maxIndex .
@@ -1172,13 +1067,13 @@ To execute the script open a Shell and navigate to the folder where the scripts 
 pathToData: Provide full path to data folder.
 
 \vspace{0.05cm}
-prefixFileName: Provide file name prefix. For an example see Figure~\ref{fig:MCMCOutputName}.
+prefixFileName: Provide file name prefix.
 
 \vspace{0.05cm}
-suffixFileName: Provide file name suffix. For an example see Figure~\ref{fig:MCMCOutputName}.
+suffixFileName: Provide file name suffix.
 
 \vspace{0.05cm}
-maxIndex: The number of sub-data sets the original data has been split-up to. For an example see Figure~\ref{fig:MCMCOutputName}.
+maxIndex: The number of sub-data sets the original data has been split-up to.
 
 \\
 
@@ -1187,7 +1082,7 @@ maxIndex: The number of sub-data sets the original data has been split-up to. Fo
 \hangafter=1
 \noindent
 
-As above, but for growth rates 'R'. Note that if estimates with identical estimates are only represented once. That is the case, for instance, when data has been analyzed on the level of amino acids (see '-p' option in Tab.~~\ref{tbl:tablePythonOptions}).
+As above, but for growth rates 'R'.
 
 \\
 
@@ -1196,10 +1091,9 @@ As above, but for growth rates 'R'. Note that if estimates with identical estima
 \hangafter=1
 \noindent
 
-This script combines all MCMC ouput files of type '\texttt{\char`_C} of all sub-data sets to a single file. Note that the reference sequence and the 'summary mutants' (i.e., protID=-1)
-will be deleted, since they do not contain any relevant information.
+This script combines all MCMC ouput files of type '\texttt{\char`_C} of all sub-data sets into a single file. Note that the reference sequence will be deleted, since it does not contain any relevant information.
 
-To execute the script open a Shell and navigate to the folder where the scripts are stored and type
+To execute the script type
 
 \vspace{0.05cm}
 ./\texttt{Combine\char`_PopSizes\char`_C.sh} pathToData prefixFileName suffixFileName maxIndex .
@@ -1209,13 +1103,13 @@ To execute the script open a Shell and navigate to the folder where the scripts 
 pathToData: Provide full path to data folder.
 
 \vspace{0.05cm}
-prefixFileName: Provide file name prefix. For an example see Figure~\ref{fig:MCMCOutputName}.
+prefixFileName: Provide file name prefix.
 
 \vspace{0.05cm}
-suffixFileName: Provide file name suffix. For an example see Figure~\ref{fig:MCMCOutputName}.
+suffixFileName: Provide file name suffix.
 
 \vspace{0.05cm}
-maxIndex: The number of sub-data sets the original data has been split-up to. For an example see Figure~\ref{fig:MCMCOutputName}.
+maxIndex: The number of sub-data sets the original data has been split-up to.
 
 \\
 
@@ -1224,20 +1118,20 @@ maxIndex: The number of sub-data sets the original data has been split-up to. Fo
 \hangafter=1
 \noindent
 
-As above, but for growth rates 'R'. Note that if estimates with identical estimates are only represented once. That is the case, for instance, when data has been analyzed on the level of amino acids (see '-p' option in Tab.~~\ref{tbl:tablePythonOptions}).
+As above, but for growth rates 'R'.
 
 \\
 
-\mc{1}{l}{\texttt{RenameMCMCOutput.sh}} & 3  &
+\mc{1}{l}{\texttt{RemoveMCMCTimeStamp.sh}} & 3  &
 \hangindent=1em
 \hangafter=1
 \noindent
 
-This script renames the \texttt{empiricIST\char`_MCMC} output files (by removing the time stamp)
-To execute the script open a Shell and navigate to the folder where the scripts are stored and type
+This script removes the time stamp from all \texttt{empiricIST\char`_MCMC} output files.
+To execute the script type
 
 \vspace{0.05cm}
-./\texttt{RenameMCMCOutput.sh} pathToPerlRename pathToData prefixFileName  .
+./\texttt{RemoveMCMCTimeStamp.sh} pathToPerlRename pathToData prefixFileName  .
 \vspace{0.05cm}
 
 \vspace{0.05cm}
@@ -1247,7 +1141,7 @@ pathToPerlRename: Provide full path to 'rename.pl'.
 pathToData: Provide full path to data folder.
 
 \vspace{0.05cm}
-prefixFileName: Provide file name prefix. For an example see Figure~\ref{fig:MCMCOutputName}.
+prefixFileName: Provide file name prefix.
 
 \\
 
@@ -1262,8 +1156,9 @@ prefixFileName: Provide file name prefix. For an example see Figure~\ref{fig:MCM
 
 
 \subsection{Concatenating Files}
-If an MCMC analyses has been continued across multiple runs (i.e., by starting another MCMC run from the last accepted sample; see initialRC above), the 'ConcantenateData.sh' script can be used to produce a single file of all sampled growth rates 'r', initial population sizes 'c' and log-likelihoods, respectively .
+When an MCMC analysis has been continued across multiple runs (i.e., by starting another MCMC run from the last accepted sample; see -initial option above), the 'ConcantenateData.sh' script can be used to produce a single file of all sampled growth rates 'r', initial population sizes 'c' and log-likelihoods, respectively.
 
+\clearpage
 {
 \centering
 \renewcommand{\arraystretch}{1.25}
@@ -1274,14 +1169,13 @@ If an MCMC analyses has been continued across multiple runs (i.e., by starting a
 \toprule
 \mc{1}{l}{\textbf{Script}} & \textbf{No.~of passed variables} & \textbf{Description} \\
  & & \\\hline
-\mc{1}{l}{\texttt{ConcatenateDatal.sh}} & 8 &  
+\mc{1}{l}{\texttt{ConcatenateData.sh}} & 8 &  
 \hangindent=1em
 \hangafter=1
 \noindent
 
-
-This script renames all MCMC output files, deletes the files that will not be combined, and concatenates the individual files.
-To execute the script open a Shell and navigate to the folder where the scripts are stored and type
+This script removes the time stamp from all MCMC output files, (optionally) deletes the files that will not be combined, and concatenates the individual files.
+To execute the script type
 
 \vspace{0.05cm}
 ./\texttt{ConcantenateData.sh} pathToData pathToMove pathToPerlRename prefixFileName suffixFileName simIdentifier maxIndex deleteFiles .
@@ -1297,10 +1191,10 @@ pathToPerlRename: Provide full path to 'rename.pl'.
 \vspace{0.05cm}
 
 
-prefixFileName: Provide file name prefix. For an example see Figure~\ref{fig:MCMCOutputName}.
+prefixFileName: Provide file name prefix.
 \vspace{0.05cm}
 
-suffixFileName: Provide file name suffix. For an example see Figure~\ref{fig:MCMCOutputName}.
+suffixFileName: Provide file name suffix.
 \vspace{0.05cm}
 
 simdentifier: Provide indicator for which data to concatenate: R: growth rates, C: initial population sizes, logLTS: log-likelihood
@@ -1309,15 +1203,14 @@ simdentifier: Provide indicator for which data to concatenate: R: growth rates, 
 maxIndex: The number of MCMC runs the original data has been split-up to. For an example see Figure~\ref{fig:MCMCOutputName}.
 \vspace{0.05cm}
 
-deleteFiles: When set to '1' files that will not be combined will be deleted.
+deleteFiles: When set to '1' files that will not be combined will be deleted. Set to 0 otherwise.
 \vspace{0.05cm}
 
 \end{tabularx}
 \end{scriptsize}
 }
 
-Once all samples have been combined into a single file, statistics and diagnostics can be calculated by using the provided python programs \texttt{empiricIST\char`_MCMC\char`_Statistics.py} and  \texttt{empiricIST\char`_MCMC\char`_DiagSummary.py}, respectively. Taking the raw samples an input, \texttt{empiricIST\char`_MCMC\char`_Statistics.py} creates the \texttt{quantiles}- and the \texttt{Diag} files as if obtained from a single MCMC run (for detail see above). The python program \texttt{empiricIST\char`_MCMC\char`_DiagSummary.py} can then be used to create the \texttt{Diag\char`_summary} file over all individual diagnostic statistics (see above for details). Note though, that unlike the file produced from a single MCMC run, the one created by the python program does not report the standard deviation of the proposal distribution of growth rates 'r' and initial population sizes 'c', nor the acceptance ratio. Table~\ref{tbl:tablePythonStatisticsOptions} and table~\ref{tbl:tablePythonDiagOptions} give an overview of the options for each program.
-
+Once all samples have been combined into a single file, statistics and diagnostics can be calculated by using the provided python programs\linebreak\texttt{empiricIST\char`_MCMC\char`_Statistics.py} and  \texttt{empiricIST\char`_MCMC\char`_DiagSummary.py}, respectively. Taking the raw samples as input, \texttt{empiricIST\char`_MCMC\char`_Statistics.py} creates the \texttt{quantiles}- and the \texttt{Diag} files as if obtained from a single MCMC run (for detail see above). The python program \texttt{empiricIST\char`_MCMC\char`_DiagSummary.py} can then be used to create the \texttt{Diag\char`_summary} file over all individual diagnostic statistics (see above for details). Note though, that unlike the file produced from a single MCMC run, the one created by the python program does not report the standard deviation of the proposal distribution of growth rates 'r' and initial population sizes 'c', nor the acceptance ratio. Furthermore, it can only be used when the individual log-likelihood, growth rate and initial population size files exist. Table~\ref{tbl:tablePythonStatisticsOptions} and table~\ref{tbl:tablePythonDiagOptions} give an overview of the options for each program.
 
 {
 \centering
@@ -1339,7 +1232,7 @@ When the '-h'-option is invoked, a short documentation on the usage of the progr
 \hangindent=1em
 \hangafter=1
 \noindent
-The '-f'-option is a mandatory option, which passes the name of the (raw) data input file (csv formatted) to the python program. Files created by the python program will take the name of the input file and prepend \texttt{\char`_Quantiles.txt} and insert \texttt{\char`_Diag\char`_}, respectively. 
+The '-f'-option is a mandatory option, which passes the name of the data input file to the python program. Files created by the python program will take the name of the input file and insert \texttt{\char`_Quantiles.txt} and  \texttt{\char`_Diag\char`_}, respectively. 
 \end{tabularx}
 \end{scriptsize}
 }
@@ -1364,18 +1257,16 @@ When the '-h'-option is invoked, a short documentation on the usage of the progr
 \hangindent=1em
 \hangafter=1
 \noindent
-The '-f'-option is a mandatory option, which passes the name of the (raw) data input file (csv formatted) to the python program. The output file created by the python program will take the name of the input file and prepend \texttt{\char`_summary.txt}.
+The '-f'-option is a mandatory option, which passes the base name of the data input files to the python program. For example, if the file names are \texttt{DFE\char`_Diag\char`_logTS.txt},  \texttt{DFE\char`_Diag\char`_C.txt} and  \texttt{DFE\char`_Diag\char`_R.txt} the base name to be passed is  \texttt{DFE\char`_Diag}. The output file created by the python program will take the name of the input file and prepend \texttt{\char`_summary.txt}.
 \\
 \mc{1}{l}{-s, --samples=} & integer  &
 \hangindent=1em
 \hangafter=1
 \noindent
-The '-s'-option is a mandatory option, which passes the number of samples to the python program. 
+The '-s'-option is a mandatory option, which passes the number of (posterior) samples to the python program. 
 \end{tabularx}
 \end{scriptsize}
 }
-
-
 
 \subsection{Visualization of trace data}
 
@@ -1395,12 +1286,12 @@ fileName: Provide file name without file extension (e.g., '.txt').
 
 \section{DFE tail shape estimation}
 
-The growth rate posterior samples obtained from the \texttt{empiricIST\char`_MCMC} program can be used to estimate the shape of the beneficial tail of the DFE.
-As part of the \emph{empiricIST} software package, we provide a python script -- \texttt{empiricIST\char`_MCMC\char`_TailShape.py} that fits a generalized pareto distribution to the observed beneficial mutations by maximizing the log-likelihood with respect to the shape and scale parameter $\kappa$ and $\psi$, respectively. Based on the shape parameter $\kappa$ one can discriminate between three different domains of attraction -- the Weibull, Gumbel and Fr\'{e}chet domain -- each corresponding to a different extreme value distribution. In biological terms, these different domains quantify the level of adaptedness of the organism in its (experimental) environment. In particular, the Gumbel domain ($\kappa=0$; null model corresponding to 'normal' level of adaptedness) is characterized by an exponential tail, whereas the Weibull domain ($\kappa<0$; better adapted) has lighter than exponential tails, and the Fr\'{e}chet domain ($\kappa>0$; less well adapted) has heavier than exponential tails. For more details please consult \cite{BeiRW07}.
+The growth rate posterior samples obtained from the \texttt{empiricIST\char`_MCMC} program can be used to estimate the shape of the beneficial tail of the distribution of fitness effects (DFE).
+As part of the \emph{empiricIST} software package, we provide a python\linebreak script -- \texttt{empiricIST\char`_MCMC\char`_TailShape.py} that fits a generalized pareto distribution to the observed beneficial mutations by maximizing the log-likelihood with respect to the shape and scale parameter $\kappa$ and $\psi$, respectively. Based on the shape parameter $\kappa$ one can discriminate between three different domains of attraction -- the Weibull, Gumbel and Fr\'{e}chet domain -- each corresponding to a different extreme value distribution. In biological terms, these different domains quantify the level of adaptedness of the organism in its (experimental) environment. In particular, the Gumbel domain ($\kappa=0$; null model corresponding to 'normal' level of adaptedness) is characterized by an exponential tail, whereas the Weibull domain ($\kappa<0$; better adapted) has lighter than exponential tails, and the Fr\'{e}chet domain ($\kappa>0$; less well adapted) has heavier than exponential tails. For more details please consult \cite{BeiRW07}.
 
 While the python script primarily estimates the DFE tail shape parameter $\kappa$, there are some additional options that will be detailed here.
 
-The general usage is as follows: After opening a command-line interface (e.g., Shell, Terminal) and navigating to the location of the \texttt{empiricIST\char`_MCMC\char`_TailShape.py} file, the program can be executed by typing
+The general usage is as follows: The program can be executed by typing
 
 \begin{lstlisting}
 python empiricIST_MCMC_TailShape.py [options] .
@@ -1408,7 +1299,7 @@ python empiricIST_MCMC_TailShape.py [options] .
 
 Without specifying any options the program will exit with an error and provide a short documentation on its usage, as it requires the name of the data input file (by invoking the '-f' option). 
 Note that the input file needs to be formatted in a specific way. If the data set had been split into multiple subsets (see '-g' option in Tab.~\ref{tbl:tablePythonOptions}), and has been re-assembled by the using the provided shell scripts (see 'Combining Files'), the input file is already correctly formatted and there is nothing that needs to be done. However, if the data set has been analyzed as a whole (i.e., without being split into multiple subsets) the file containing the posterior growth rate samples needs to be reformatted to match the required input format.
-This can be done by using he provided shell script \texttt{Create\char`_TailShapeFile\char`R.sh}, which creates the input file for the \texttt{empricIST\char`_MCMC\char`_TailShape.py} program and can be executed by opening a Shell and navigating to the folder where the scripts are stored and typing 
+This can be done by using he provided shell script \texttt{Create\char`_TailShapeFile\char`R.sh}, which creates the input file for the \texttt{empricIST\char`_MCMC\char`_TailShape.py} program and can be executed by typing 
 
 \vspace{0.05cm}
 ./\texttt{Create\char`_TailShapeFile\char`R.sh} pathToData fileName .
@@ -1420,7 +1311,7 @@ pathToData: Provide full path to data folder.
 fileName: Provide file name without file extension (e.g., '.txt').
 \vspace{0.05cm}
 
-Note that to execute the bash script, it needs to have the appropriate rights to perform the operations. In order to set the correct permissions, open a Shell and navigate to the folder where the script is stored and type
+Please ensure that the script has the appropriate file permissions to perform the operations. File permissions can be adjusted by using the command-line and typing
 \begin{lstlisting}[breaklines=true]
 chmod 755 Create_TailShapeFile_R.sh .
 \end{lstlisting}
@@ -1447,7 +1338,7 @@ When the '-h'-option is invoked, a short documentation on the usage of the progr
 \hangindent=1em
 \hangafter=1
 \noindent
-The '-f'-option is a mandatory option, which passes the name of the data input file (tsv formatted) to the python program. Files created by the python program will take the name of the input file and add option-dependent specific file identifiers. Note that even if a random data set is created (see 'r'-option), a file name must be provided since it serves as the prefix for the output file name.
+The '-f'-option is a mandatory option, which passes the name of the data input file to the python program. Files created by the python program will take the name of the input file and add option-dependent specific file identifiers. Note that even if a random data set is created (see 'r'-option), a file name must be provided since it serves as the prefix for the output file name.
 \\
 \mc{1}{l}{-m, --missing} & none &
 \hangindent=1em
@@ -1467,7 +1358,7 @@ When the '-s'-option is invoked, the python program will only consider samples w
 \noindent 
 When the '-l'-option is invoked, a likelihood-ratio test with null hypotheses $\kappa=0$ against median($\hat{\kappa}$) is performed. Note that the distribution of the test statistic is generated by using a parametric bootstrap approach with $10.000$ samples \citep[see]{BeiRW07}.
 \\
-\mc{1}{l}{-r, --random=} & float &
+\mc{1}{l}{-r, --random=} & double &
 \hangindent=1em
 \hangafter=1
 \noindent 
@@ -1481,14 +1372,13 @@ By default the program will always create two output files that contain the $\ka
 When performing a likelihood-ratio test (by invoking the 'l'-option) an additional file called \texttt{<InputFileName>\char`_LRT.txt} is created containing the $\hat{\kappa}$ against which $H_0: \kappa=0$ is evaluated. Furthermore, the output file gives the maximum-likelihood estimate $\hat{\psi}_{\kappa_0}$, i.e., the estimated scale parameter $\psi$ restricting $\kappa=0$, the value of the test statistic
 
 \begin{equation}
--2\log(\Lambda)=2(\mathcal{L}(\mathbf{X}\mid \hat{\kappa}, \hat{\psi})-\mathcal{L}(\mathbf{X}\mid o, \hat{\psi}_{\kappa_0})),
+-2\log(\Lambda)=2(\mathcal{L}(\mathbf{X}\mid \hat{\kappa}, \hat{\psi})-\mathcal{L}(\mathbf{X}\mid 0, \hat{\psi}_{\kappa_0})),
 \end{equation}
 
 where $\mathbf{X}$ denotes a single vector of posterior samples of growth rates and $\mathcal{L}$ is the log-likelihood function, and the associated p-value along with the sample size.
 Note that power critically depends on sample size as has been discussed in \cite{BeiRW07} and \cite{CasS15} (the latter rather in the context of estimating $\kappa$ accurately).
 
 \clearpage
- 
 
 \bibliography{/Users/matu/Documents/Literature/Literature.bib} 
 

@@ -1,16 +1,13 @@
 \select@language {english}
 \contentsline {section}{\numberline {1}Introduction}{3}{section.1}
 \contentsline {section}{\numberline {2}Input data}{3}{section.2}
-\contentsline {subsection}{\numberline {2.1}\texttt {empiricIST\char `_MCMC\char `_Input}.py}{4}{subsection.2.1}
-\contentsline {section}{\numberline {3}Usage}{8}{section.3}
-\contentsline {subsection}{\numberline {3.1}Compilation}{8}{subsection.3.1}
-\contentsline {subparagraph}{\nonumberline Compilation and installation of the gsl-library from source}{9}{section*.7}
-\contentsline {subparagraph}{\nonumberline Compilation of the MCMC}{10}{section*.8}
-\contentsline {subsection}{\numberline {3.2}Execution}{11}{subsection.3.2}
-\contentsline {paragraph}{\nonumberline Cygwin}{11}{section*.12}
-\contentsline {paragraph}{\nonumberline Powershell}{12}{section*.13}
-\contentsline {section}{\numberline {4}MCMC output}{14}{section.4}
-\contentsline {subsection}{\numberline {4.1}Combining Files}{19}{subsection.4.1}
-\contentsline {subsection}{\numberline {4.2}Concatenating Files}{22}{subsection.4.2}
-\contentsline {subsection}{\numberline {4.3}Visualization of trace data}{23}{subsection.4.3}
-\contentsline {section}{\numberline {5}DFE tail shape estimation}{24}{section.5}
+\contentsline {subsection}{\numberline {2.1}\texttt {empiricIST\char `_MCMC\char `_Input}.py}{3}{subsection.2.1}
+\contentsline {section}{\numberline {3}Usage}{6}{section.3}
+\contentsline {subsection}{\numberline {3.1}Compilation}{6}{subsection.3.1}
+\contentsline {subparagraph}{\nonumberline Compilation and installation of the gsl-library from source}{9}{section*.5}
+\contentsline {subsection}{\numberline {3.2}Execution}{9}{subsection.3.2}
+\contentsline {section}{\numberline {4}MCMC output}{11}{section.4}
+\contentsline {subsection}{\numberline {4.1}Combining Files}{16}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Concatenating Files}{18}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}Visualization of trace data}{20}{subsection.4.3}
+\contentsline {section}{\numberline {5}DFE tail shape estimation}{20}{section.5}

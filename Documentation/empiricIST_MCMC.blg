@@ -1,48 +1,48 @@
-This is BibTeX, Version 0.99d (TeX Live 2014)
-Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+This is BibTeX, Version 0.99d (TeX Live 2017)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: empiricIST_MCMC.aux
 The style file: /Users/matu/Documents/Literature/evolution.bst
 Database file #1: /Users/matu/Documents/Literature/Literature.bib.bib
-Warning--empty journal in MatJB15
-You've used 3 entries,
+Warning--I didn't find a database entry for "FraMJ17"
+You've used 5 entries,
             2892 wiz_defined-function locations,
-            731 strings with 6085 characters,
-and the built_in function-call counts, 1891 in all, are:
-= -- 143
-> -- 111
-< -- 0
-+ -- 40
-- -- 33
-* -- 146
-:= -- 309
-add.period$ -- 8
-call.type$ -- 3
-change.case$ -- 26
-chr.to.int$ -- 3
-cite$ -- 4
-duplicate$ -- 132
-empty$ -- 126
-format.name$ -- 42
-if$ -- 367
+            771 strings with 6595 characters,
+and the built_in function-call counts, 3197 in all, are:
+= -- 252
+> -- 182
+< -- 1
++ -- 63
+- -- 54
+* -- 243
+:= -- 518
+add.period$ -- 14
+call.type$ -- 5
+change.case$ -- 43
+chr.to.int$ -- 5
+cite$ -- 5
+duplicate$ -- 219
+empty$ -- 216
+format.name$ -- 71
+if$ -- 631
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 27
-newline$ -- 20
-num.names$ -- 12
-pop$ -- 58
+missing$ -- 45
+newline$ -- 30
+num.names$ -- 20
+pop$ -- 91
 preamble$ -- 1
-purify$ -- 23
+purify$ -- 38
 quote$ -- 0
-skip$ -- 39
+skip$ -- 62
 stack$ -- 0
-substring$ -- 79
-swap$ -- 57
+substring$ -- 155
+swap$ -- 100
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 27
-warning$ -- 1
-while$ -- 11
+type$ -- 45
+warning$ -- 0
+while$ -- 19
 width$ -- 0
-write$ -- 41
+write$ -- 67
 (There was 1 warning)
