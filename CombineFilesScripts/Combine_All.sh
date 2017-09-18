@@ -33,37 +33,37 @@ fi
 
 # This command renames the empiricIST_MCMC output files by removing the time stamp
 
-files=$(ls $pathToData$prefixFileName-*_R.txt)
+files=$(ls $pathToData/$prefixFileName-*_R.txt)
 for (( j=1; j<=${#files[@]}; j++ ))
 	do
 	perl $pathToPerlRename/rename.pl 's/(.*_)\d*_\d*_\d*_\d*_(.*txt)/$1$2/g' ${files[$((j - 1))]}
 	done
 
-files=$(ls $pathToData$prefixFileName-*_R_*)
+files=$(ls $pathToData/$prefixFileName-*_R_*)
 for (( j=1; j<=${#files[@]}; j++ ))
 	do
 	perl $pathToPerlRename/rename.pl 's/(.*_)\d*_\d*_\d*_\d*_(.*txt)/$1$2/g' ${files[$((j - 1))]}
 	done
 
-files=$(ls $pathToData$prefixFileName-*Diag_R*)
+files=$(ls $pathToData/$prefixFileName-*Diag_R*)
 for (( j=1; j<=${#files[@]}; j++ ))
 	do
 	perl $pathToPerlRename/rename.pl 's/(.*_)\d*_\d*_\d*_\d*_(.*txt)/$1$2/g' ${files[$((j - 1))]}
 	done
 
-files=$(ls $pathToData$prefixFileName-*_C.txt)
+files=$(ls $pathToData/$prefixFileName-*_C.txt)
 for (( j=1; j<=${#files[@]}; j++ ))
 	do
 	perl $pathToPerlRename/rename.pl 's/(.*_)\d*_\d*_\d*_\d*_(.*txt)/$1$2/g' ${files[$((j - 1))]}
 	done
 
-files=$(ls $pathToData$prefixFileName-*_C_*)
+files=$(ls $pathToData/$prefixFileName-*_C_*)
 for (( j=1; j<=${#files[@]}; j++ ))
 	do
 	perl $pathToPerlRename/rename.pl 's/(.*_)\d*_\d*_\d*_\d*_(.*txt)/$1$2/g' ${files[$((j - 1))]}
 	done
 
-files=$(ls $pathToData$prefixFileName-*Diag_C*)
+files=$(ls $pathToData/$prefixFileName-*Diag_C*)
 for (( j=1; j<=${#files[@]}; j++ ))
 	do
 	perl $pathToPerlRename/rename.pl 's/(.*_)\d*_\d*_\d*_\d*_(.*txt)/$1$2/g' ${files[$((j - 1))]}

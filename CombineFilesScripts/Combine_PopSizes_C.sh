@@ -30,7 +30,7 @@ for (( j=1; j<=$maxIndex; j++ ))
 		tail -n+15 $prefixFileName-$j-$suffixFileName\_C.txt > MCMC-$j-DFE_C.txt
 		cutlast=$(head -n 1 MCMC-$j-DFE_C.txt | grep -o "c.-1" | wc -l)
 		((cutlast++))
-		cut -f 3- MCMC-$j-DFE_C.txt > MCMC2-$j-DFE_C.txt
+		cut -f 2- MCMC-$j-DFE_C.txt > MCMC2-$j-DFE_C.txt
 		rev MCMC2-$j-DFE_C.txt | cut -f $cutlast- | rev > MCMC-$j-DFE_C.txt
 	done
 
